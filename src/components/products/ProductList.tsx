@@ -1,5 +1,5 @@
 import { Product } from '../../interfaces/products/product.interface';
-import ProductDetail from './ProductDetail';
+import ProductCard from './ProductCard';
 import React from 'react';
 
 type Props = {
@@ -10,7 +10,7 @@ const ProductList: React.FC<Props> = ({ products }) => {
   return (
     <div className="product-list">
       {products.map((product) => (
-        <ProductDetail key={product.id} product={product} />
+        <ProductCard key={product.id} product={product} />
       ))}
     </div>
   );

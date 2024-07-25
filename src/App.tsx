@@ -1,11 +1,13 @@
 import './App.scss';
 
-import Test from './pages/Test';
+import ProductDetails from './components/products/ProductDetails';
+import Products from './pages/Products';
 
 const App: React.FC = () => {
   return (
     <div className="app">
-      <Test />
+      <Products />
+      <ProductDetails/>
     </div>
   );
 };

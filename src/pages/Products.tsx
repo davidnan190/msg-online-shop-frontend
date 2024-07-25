@@ -1,7 +1,7 @@
 import ProductList from '../components/products/ProductList';
 import { productsMock } from '../mocks/product.mock';
 
-const Test: React.FC = () => {
+const Products: React.FC = () => {
   return (
     <>
       <h1 className="headline">msg Romania Online Shop</h1>
@@ -10,4 +10,4 @@ const Test: React.FC = () => {
   );
 };
 
-export default Test;
+export default Products;

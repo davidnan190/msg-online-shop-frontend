@@ -3,11 +3,11 @@ $secondary-color: #535b64;
 $text-color: #333;
 $background-color: #fff;
 $border-color: #ccc;
-$font-family: Arial, sans-serif;
-$padding: 16px;
+$font-family: 'Roboto', Arial, sans-serif;
+$padding: 12px;
 $margin: 16px;
 $border-radius: 8px;
-$box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+$box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 $btn-primary-color: $background-color;
 $btn-primary-bg: $primary-color;
 $btn-secondary-color: $background-color;
@@ -30,29 +30,63 @@ $btn-secondary-bg: $secondary-color;
   --btn-secondary-bg: #{$btn-secondary-bg};
 }
 
-// Product detail styles
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: $padding;
+  font-family: $font-family;
+}
+
+h1 {
+  text-align: center;
+  color: $text-color;
+}
+
+.headline {
+  color: $primary-color;
+}
+
+.product-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: $margin;
+}
+
 .product-detail {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
   border: 1px solid $border-color;
   border-radius: $border-radius;
   padding: $padding;
-  margin: $margin 0;
   background-color: $background-color;
   box-shadow: $box-shadow;
+  position: relative;
+  transition: transform 0.3s, box-shadow 0.3s;
+  max-width: 400px;
+
+  &:hover {
+    transform: scale(1.01);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+    .product-actions {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
+    }
+  }
 
   .product-image {
-    max-width: 150px;
-    margin-right: $padding;
+    width: 100%;
     border-radius: $border-radius;
+    object-fit: cover;
   }
 
   .product-info {
     flex: 1;
+    padding: $padding;
 
     .product-name {
-      font-size: 1.5em;
+      font-size: 1.1em;
       margin: 0 0 8px;
       color: $text-color;
     }
@@ -63,57 +97,59 @@ $btn-secondary-bg: $secondary-color;
       color: $background-color;
       padding: 4px 8px;
       border-radius: 12px;
-      font-size: 0.9em;
+      font-size: 0.875em;
       margin-bottom: 8px;
     }
 
     .product-price {
       color: $primary-color;
-      font-size: 1.2em;
+      font-size: 1em;
       margin: 0 0 8px;
     }
 
-    .product-weight {
-      font-size: 1em;
+    .product-weight,
+    .product-supplier {
+      font-size: 0.875em;
       margin: 0 0 8px;
       color: $text-color;
     }
 
     .product-description {
       color: #555;
-      font-size: 1em;
+      font-size: 0.875em;
+      margin-bottom: 16px;
     }
   }
 
   .product-actions {
+    position: absolute;
+    top: 8px;
+    right: 8px;
     display: flex;
     gap: 8px;
-    margin-top: 16px;
+    opacity: 0;
+    visibility: hidden;
 
     .btn {
-      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
       border: none;
-      border-radius: $border-radius;
-      font-size: 1em;
+      background-color: rgba(255, 255, 255, 0.9);
+      box-shadow: $box-shadow;
       cursor: pointer;
       transition: background-color 0.3s ease;
 
-      &-details {
-        background-color: $btn-primary-bg;
-        color: $btn-primary-color;
-
-        &:hover {
-          background-color: darken($btn-primary-bg, 10%);
-        }
+      &:hover {
+        background-color: rgba(255, 255, 255, 1);
       }
 
-      &-cart {
-        background-color: $btn-secondary-bg;
-        color: $btn-secondary-color;
-
-        &:hover {
-          background-color: darken($btn-secondary-bg, 10%);
-        }
+      .icon {
+        color: $primary-color;
+        font-size: 1.2em;
       }
     }
   }
