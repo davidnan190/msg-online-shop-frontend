@@ -1,4 +1,33 @@
 :root {
+  --primary-color: #8f3019;
+  --secondary-color: #535b64;
+  --text-color: #333;
+  --background-color: #fff;
+  --border-color: #ccc;
+  --font-family: Roboto, Arial, sans-serif;
+  --padding: 16px;
+  --margin: 16px;
+  --border-radius: 8px;
+  --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.app {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--padding);
+  font-family: var(--font-family);
+}
+
+h1 {
+  text-align: center;
+  color: var(--text-color);
+}
+
+.headline {
+  color: var(--primary-color);
+}
+
+/* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -65,4 +94,4 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
-}
+} */
