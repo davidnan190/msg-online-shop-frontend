@@ -1,6 +1,10 @@
+// src/components/products/product-details/ProductDetails.tsx
+
+import './ProductDetails.scss';
+
 import { FaShoppingCart } from 'react-icons/fa';
 import React from 'react';
-import { productsMock } from '../../mocks/product.mock';
+import { productsMock } from '../../../mocks/product.mock';
 
 const ProductDetails: React.FC = () => {
   const product = productsMock[1];
@@ -10,7 +14,7 @@ const ProductDetails: React.FC = () => {
   }
 
   return (
-    <div className="product-details">
+    <div className="product-details-card">
       <div className="product-image">
         <img src={product.imageUrl} alt={product.name} />
       </div>

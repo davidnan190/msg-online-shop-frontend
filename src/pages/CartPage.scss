@@ -1,0 +1,113 @@
+// src/pages/CartPage.scss
+
+@import '../styles/variables';
+
+.cart-page {
+  padding: var(--padding);
+  background-color: var(--background-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+.cart-title {
+  font-size: 2em;
+  margin-bottom: var(--padding);
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--padding);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--padding);
+
+  .cart-item-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: var(--border-radius);
+  }
+
+  .cart-item-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: var(--padding);
+
+    .cart-item-name {
+      font-size: 1.5em;
+      margin: 0 0 8px;
+      color: var(--text-color);
+    }
+
+    .cart-item-quantity {
+      display: flex;
+      align-items: center;
+      margin: 0 0 8px;
+      color: var(--text-color);
+
+      .quantity-btn {
+        background-color: var(--primary-color);
+        color: var(--background-color);
+        padding: 4px 8px;
+        border: none;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        margin: 0 4px;
+
+        &:disabled {
+          background-color: var(--secondary-color);
+        }
+      }
+
+      span {
+        margin: 0 8px;
+        font-size: 1em;
+      }
+    }
+
+    .cart-item-location,
+    .cart-item-price {
+      font-size: 1em;
+      margin: 0 0 8px;
+      color: var(--text-color);
+    }
+
+    .btn-remove {
+      background-color: var(--secondary-color);
+      color: var(--background-color);
+      padding: 8px 16px;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      max-width: 100px;
+      text-align: center;
+
+      // &:hover {
+      //   background-color: darken(var(--error-color), 10%);
+      // }
+    }
+  }
+}
+
+.cart-total {
+  font-size: 1.5em;
+  text-align: right;
+  margin-top: var(--padding);
+  margin-right: var(--padding);
+}
+
+.btn-clear {
+  background-color: var(--primary-color);
+  color: var(--background-color);
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  // &:hover {
+  //   background-color: darken(var(--primary-color), 10%);
+  // }
+}

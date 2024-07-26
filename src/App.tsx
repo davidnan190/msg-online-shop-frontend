@@ -1,13 +1,12 @@
-import './App.scss';
+import './App.scss'
 
-import ProductDetails from './components/products/ProductDetails';
-import Products from './pages/Products';
+import { Outlet } from 'react-router-dom';
+import React from 'react';
 
 const App: React.FC = () => {
   return (
-    <div className="app">
-      <Products />
-      <ProductDetails/>
+    <div className={'app'}>
+      <Outlet />
     </div>
   );
 };
