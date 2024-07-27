@@ -1,10 +1,9 @@
-// src/components/products/product-card/ProductCard.tsx
-
 import './ProductCard.scss';
 
 import { FaInfoCircle, FaShoppingCart } from 'react-icons/fa';
 import React, { useState } from 'react';
 
+import AddToCartDropdown from '../product-dropdown/AddToCartDropdown';
 import { IProduct } from '../../../interfaces/products/product.interface';
 import { Link } from 'react-router-dom';
 import { useCart } from '../../../context/CartContext';
@@ -15,17 +14,17 @@ type Props = {
 
 const ProductCard: React.FC<Props> = ({ product }) => {
   const { addToCart } = useCart();
-  const [quantity, setQuantity] = useState(1);
-  const [location, setLocation] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (desiredQuantity: number, location: string) => {
     if (showDropdown) {
-      addToCart(product, quantity, location);
+      addToCart(product, desiredQuantity, location);
       setShowDropdown(false);
-    } else {
-      setShowDropdown(true);
     }
+  };
+
+  const handleAddToCartDropdown = () => {
+    setShowDropdown((prevValue) => !prevValue);
   };
 
   return (
@@ -39,44 +38,17 @@ const ProductCard: React.FC<Props> = ({ product }) => {
         <h2 className="product-name">{product.name}</h2>
         <span className="product-category">{product.category.name}</span>
         <p className="product-price">{product.price.toFixed(2)} RON</p>
-        <p className="product-supplier">From: {product.supplier}</p>
+        <p className="product-supplier">From {product.supplier}</p>
       </div>
       <div className="product-actions">
-        <button className="btn btn-cart" onClick={handleAddToCart}>
+        <button className="btn" onClick={handleAddToCartDropdown}>
           <FaShoppingCart className="icon" />
         </button>
-        <Link to="/cart" className="btn btn-details">
+        <Link to={`/products/${product.id}`} className="btn btn-details">
           <FaInfoCircle className="icon" />
         </Link>
       </div>
-      {showDropdown && (
-        <div className="dropdown">
-          <label htmlFor="location" className="location-label">
-            Location:
-          </label>
-          <input
-            type="text"
-            id="location"
-            className="location-input"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-          />
-          <label htmlFor="quantity" className="quantity-label">
-            Quantity:
-          </label>
-          <input
-            type="number"
-            id="quantity"
-            className="quantity-input"
-            value={quantity}
-            onChange={(e) => setQuantity(parseInt(e.target.value, 10))}
-            min="1"
-          />
-          <button className="btn btn-add" onClick={handleAddToCart}>
-            Add to Cart
-          </button>
-        </div>
-      )}
+      {showDropdown && <AddToCartDropdown onAddToCart={handleAddToCart} />}
     </div>
   );
 };

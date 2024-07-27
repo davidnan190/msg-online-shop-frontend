@@ -1,0 +1,26 @@
+@import '../../../styles/variables.scss';
+
+.cart-actions {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  padding: var(--padding);
+
+  margin-top: -35px;
+
+  .btn-clear {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    padding: 10px 20px;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    top: -10px;
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
+    }
+  }
+}

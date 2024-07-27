@@ -1,8 +1,16 @@
 @import '../../../styles/variables';
 
-.product-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: var(--border-radius) 0 0 var(--border-radius);
+.product-details-image {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--padding);
+  background-color: var(--background-color-secondary);
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: var(--border-radius);
+  }
 }

@@ -1,0 +1,9 @@
+@import '../../../styles/variables';
+
+.cart-total {
+  font-size: 1.5em;
+  text-align: right;
+  margin-top: var(--padding);
+  margin-right: var(--padding);
+  color: var(--text-color);
+}

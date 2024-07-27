@@ -32,7 +32,12 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
   }, [cart]);
 
   const addToCart = (product: IProduct, quantity: number, location: string) => {
-    setCart((prevCart) => [...prevCart, { product, quantity, location }]);
+    const isProductInCart =
+      cart.map((item) => item.product.id === product.id).length != 0;
+
+    if (!isProductInCart) {
+      setCart((prevCart) => [...prevCart, { product, quantity, location }]);
+    }
   };
 
   const updateQuantity = (productId: string, quantity: number) => {
