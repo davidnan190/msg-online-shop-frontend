@@ -28,40 +28,43 @@ const ProductDetailsPage: React.FC = () => {
   };
 
   return (
-    <div className="product-details-page">
-      <div className="product-details-card">
-        <ProductDetailsImage imageUrl={product.imageUrl} />
-        <div className="product-info">
-          <ProductDetailsInfo product={product} />
-          <div className="product-details-actions">
-            <label htmlFor="quantity" className="quantity-label">
-              Quantity:
-            </label>
-            <input
-              type="number"
-              id="quantity"
-              className="quantity-input"
-              value={quantity}
-              onChange={(e) => setQuantity(parseInt(e.target.value, 10))}
-              min="1"
-            />
-            <label htmlFor="location" className="location-label">
-              Location:
-            </label>
-            <input
-              type="text"
-              id="location"
-              className="location-input"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-            />
-            <button className="btn btn-cart" onClick={handleAddToCart}>
-              Add to Cart
-            </button>
+    <>
+      <h1 className="page-headline">Product Details</h1>
+      <div className="product-details-page">
+        <div className="product-details-card">
+          <ProductDetailsImage imageUrl={product.imageUrl} />
+          <div className="product-info">
+            <ProductDetailsInfo product={product} />
+            <div className="product-details-actions">
+              <label htmlFor="quantity" className="quantity-label">
+                Quantity:
+              </label>
+              <input
+                type="number"
+                id="quantity"
+                className="quantity-input"
+                value={quantity}
+                onChange={(e) => setQuantity(parseInt(e.target.value, 10))}
+                min="1"
+              />
+              <label htmlFor="location" className="location-label">
+                Location:
+              </label>
+              <input
+                type="text"
+                id="location"
+                className="location-input"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+              />
+              <button className="btn btn-cart" onClick={handleAddToCart}>
+                Add to Cart
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

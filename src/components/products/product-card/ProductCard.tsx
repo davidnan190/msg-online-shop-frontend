@@ -5,12 +5,12 @@ import './ProductCard.scss';
 import { FaInfoCircle, FaShoppingCart } from 'react-icons/fa';
 import React, { useState } from 'react';
 
+import { IProduct } from '../../../interfaces/products/product.interface';
 import { Link } from 'react-router-dom';
-import { Product } from '../../../interfaces/products/product.interface';
 import { useCart } from '../../../context/CartContext';
 
 type Props = {
-  product: Product;
+  product: IProduct;
 };
 
 const ProductCard: React.FC<Props> = ({ product }) => {
@@ -30,7 +30,11 @@ const ProductCard: React.FC<Props> = ({ product }) => {
 
   return (
     <div className="product-card">
-      <img src={product.imageUrl} alt={product.name} className="product-image" />
+      <img
+        src={product.imageUrl}
+        alt={product.name}
+        className="product-image"
+      />
       <div className="product-info">
         <h2 className="product-name">{product.name}</h2>
         <span className="product-category">{product.category.name}</span>

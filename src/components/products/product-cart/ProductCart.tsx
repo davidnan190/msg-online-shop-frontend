@@ -1,15 +1,13 @@
-// src/components/products/product-card/ProductCard.tsx
-
 import './ProductCard.scss';
 
-import { FaInfoCircle, FaShoppingCart } from 'react-icons/fa';
 import React, { useState } from 'react';
 
-import { Product } from '../../../interfaces/products/product.interface';
+import { FaShoppingCart } from 'react-icons/fa';
+import { IProduct } from '../../../interfaces/products/product.interface';
 import { useCart } from '../../../context/CartContext';
 
 type Props = {
-  product: Product;
+  product: IProduct;
 };
 
 const ProductCard: React.FC<Props> = ({ product }) => {
@@ -23,7 +21,11 @@ const ProductCard: React.FC<Props> = ({ product }) => {
 
   return (
     <div className="product-card">
-      <img src={product.imageUrl} alt={product.name} className="product-image" />
+      <img
+        src={product.imageUrl}
+        alt={product.name}
+        className="product-image"
+      />
       <div className="product-info">
         <h2 className="product-name">{product.name}</h2>
         <span className="product-category">{product.category.name}</span>
@@ -32,7 +34,9 @@ const ProductCard: React.FC<Props> = ({ product }) => {
         <p className="product-supplier">Supplier: {product.supplier}</p>
       </div>
       <div className="product-actions">
-        <label htmlFor="location" className="location-label">Location:</label>
+        <label htmlFor="location" className="location-label">
+          Location:
+        </label>
         <input
           type="text"
           id="location"
@@ -40,7 +44,9 @@ const ProductCard: React.FC<Props> = ({ product }) => {
           value={location}
           onChange={(e) => setLocation(e.target.value)}
         />
-        <label htmlFor="quantity" className="quantity-label">Quantity:</label>
+        <label htmlFor="quantity" className="quantity-label">
+          Quantity:
+        </label>
         <input
           type="number"
           id="quantity"

@@ -1,0 +1,28 @@
+@import '../../../styles/variables';
+
+.navbar-nav {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  .nav-item {
+    margin-right: 1rem;
+    font-size: large;
+
+    .nav-link {
+      color: $primary-color;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 0.25rem;
+      transition: background-color 0.2s;
+
+      &:hover,
+      &.active {
+        color: lighten($primary-color, 5%);
+
+        text-decoration: underline;
+      }
+    }
+  }
+}

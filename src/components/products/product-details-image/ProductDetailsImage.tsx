@@ -7,7 +7,7 @@ type Props = {
 };
 
 const ProductDetailsImage: React.FC<Props> = ({ imageUrl }) => {
-  return <img src={imageUrl} alt="Product" className="product-image" />;
+  return <img src={imageUrl} alt="IProduct" className="product-image" />;
 };
 
 export default ProductDetailsImage;

@@ -10,7 +10,7 @@ const ProductDetails: React.FC = () => {
   const product = productsMock[1];
 
   if (!product) {
-    return <div>Product not found</div>;
+    return <div>IProduct not found</div>;
   }
 
   return (

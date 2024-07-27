@@ -7,7 +7,7 @@ const Products: React.FC = () => {
   const products = productsMock;
   return (
     <>
-      <h1 className="headline">Latest Products</h1>
+      <h1 className="page-headline">Latest Products</h1>
       <div className={'product-list'}>
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />

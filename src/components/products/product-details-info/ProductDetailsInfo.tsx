@@ -1,10 +1,10 @@
 import './ProductDetailsInfo.scss';
 
-import { Product } from '../../../interfaces/products/product.interface';
+import { IProduct } from '../../../interfaces/products/product.interface';
 import React from 'react';
 
 type Props = {
-  product: Product;
+  product: IProduct;
 };
 
 const ProductDetailsInfo: React.FC<Props> = ({ product }) => {

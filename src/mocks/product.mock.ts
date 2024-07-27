@@ -1,7 +1,7 @@
-import { Product } from '../interfaces/products/product.interface';
+import { IProduct } from '../interfaces/products/product.interface';
 import { Supplier } from '../enums/supplier.enum';
 
-export const productsMock: Product[] = [
+export const productsMock: IProduct[] = [
   {
     id: '1',
     name: 'Mock product 1',
@@ -37,7 +37,7 @@ export const productsMock: Product[] = [
     price: 19.99,
     supplier: Supplier.MSG_SUPPLIER,
     description: 'A lorem ipsum here!',
-    imageUrl: 'https://via.placeholder.com/150',
+    imageUrl: 'https://via.placeholder.com/480',
     category: {
       id: '1',
       name: 'Gaming',
@@ -52,7 +52,7 @@ export const productsMock: Product[] = [
     price: 69.99,
     description: 'A lorem ipsum here!',
     supplier: Supplier.MSG_SUPPLIER,
-    imageUrl: 'https://via.placeholder.com/150',
+    imageUrl: 'https://via.placeholder.com/480',
     category: {
       id: '1',
       name: 'Gaming',
@@ -66,7 +66,7 @@ export const productsMock: Product[] = [
     price: 49.99,
     description: 'A lorem ipsum here!',
     supplier: Supplier.MSG_SUPPLIER,
-    imageUrl: 'https://via.placeholder.com/150',
+    imageUrl: 'https://via.placeholder.com/480',
     category: {
       id: '1',
       name: 'Gaming',
@@ -80,7 +80,7 @@ export const productsMock: Product[] = [
     price: 19.99,
     supplier: Supplier.MSG_SUPPLIER,
     description: 'A lorem ipsum here!',
-    imageUrl: 'https://via.placeholder.com/150',
+    imageUrl: 'https://via.placeholder.com/480',
     category: {
       id: '1',
       name: 'Gaming',
