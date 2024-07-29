@@ -6,10 +6,11 @@ import {
 } from 'react-router-dom';
 
 import App from './App';
-import CartPage from './pages/CartPage';
-import NavBar from './components/navbar/NavBar';
-import ProductDetails from './pages/ProductDetailsPage';
-import ProductsPage from './pages/ProductsPage';
+import CartPage from './pages/cart-page/CartPage';
+import NavBar from './components/navigation/navbar/NavBar';
+import PlaceOrderPage from './pages/place-order-page/PlaceOrderPage';
+import ProductDetails from './pages/product-details-page/ProductDetailsPage';
+import ProductsPage from './pages/products-page/ProductsPage';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -24,6 +25,7 @@ const router = createBrowserRouter(
         <Route path="products" element={<ProductsPage />} />
         <Route path="products/:productId" element={<ProductDetails />} />
         <Route path="cart" element={<CartPage />} />
+        <Route path="place-order" element={<PlaceOrderPage />} />
         <Route path="*" element={<Navigate to="/products" />} />
       </Route>
     </Route>

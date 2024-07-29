@@ -2,29 +2,39 @@ import './AddToCartDropdown.scss';
 
 import React, { useState } from 'react';
 
+import { ILocation } from '../../../interfaces/location.interface';
+
 type Props = {
-  onAddToCart: (quantity: number, location: string) => void;
+  availableLocations: ILocation[] | undefined;
+  onAddToCart: (quantity: number, location: ILocation) => void;
 };
 
-const AddToCartDropdown: React.FC<Props> = ({ onAddToCart }) => {
+const AddToCartDropdown: React.FC<Props> = ({ availableLocations, onAddToCart }) => {
   const [quantity, setQuantity] = useState<number>(1);
-  const [location, setLocation] = useState<string>('');
+  const [selectedLocation, setSelectedLocation] = useState<ILocation | undefined>(
+    availableLocations ? availableLocations[0] : undefined
+  );
 
   return (
     <div className="add-to-cart-dropdown">
-      <label htmlFor="location" className="location-label">
-        Location:
-      </label>
-      <input
-        type="text"
+      <label htmlFor="location" className="location-label">Location:</label>
+      <select
         id="location"
-        className="location-input"
-        value={location}
-        onChange={(e) => setLocation(e.target.value)}
-      />
-      <label htmlFor="quantity" className="quantity-label">
-        Quantity:
-      </label>
+        className="location-select"
+        value={selectedLocation?.id}
+        onChange={(e) => {
+          const location = availableLocations?.find(loc => loc.id === e.target.value);
+          setSelectedLocation(location);
+        }}
+      >
+        {availableLocations?.map(location => (
+          <option key={location.id} value={location.id}>
+            {location.name} {location.city ? `(${location.city})` : ''}
+          </option>
+        ))}
+      </select>
+
+      <label htmlFor="quantity" className="quantity-label">Quantity:</label>
       <input
         type="number"
         id="quantity"
@@ -33,9 +43,12 @@ const AddToCartDropdown: React.FC<Props> = ({ onAddToCart }) => {
         onChange={(e) => setQuantity(parseInt(e.target.value, 10))}
         min="1"
       />
+
       <button
         className="btn btn-add"
-        onClick={() => onAddToCart(quantity, location)}
+        onClick={() => {
+          if (selectedLocation) onAddToCart(quantity, selectedLocation);
+        }}
       >
         Add to Cart
       </button>

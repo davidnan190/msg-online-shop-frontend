@@ -1,64 +1,52 @@
 import './ProductCard.scss';
 
+import { FaInfoCircle, FaShoppingCart } from 'react-icons/fa';
 import React, { useState } from 'react';
 
-import { FaShoppingCart } from 'react-icons/fa';
-import { IProduct } from '../../../interfaces/products/product.interface';
+import AddToCartDropdown from '../product-dropdown/AddToCartDropdown';
+import { ILocation } from '../../../interfaces/location.interface';
+import { IProduct } from '../../../interfaces/product.interface';
+import { Link } from 'react-router-dom';
 import { useCart } from '../../../context/CartContext';
 
 type Props = {
-  product: IProduct;
+  product: IProduct | undefined;
+  availableLocations: ILocation[] | undefined;
 };
 
-const ProductCard: React.FC<Props> = ({ product }) => {
+const ProductCard: React.FC<Props> = ({ product, availableLocations }) => {
   const { addToCart } = useCart();
-  const [quantity, setQuantity] = useState(1);
-  const [location, setLocation] = useState('');
+  const [showDropdown, setShowDropdown] = useState(false);
 
-  const handleAddToCart = () => {
-    addToCart(product, quantity, location);
+  const handleAddToCart = (quantity: number, desiredLocation: ILocation) => {
+    if (product && showDropdown) {
+      addToCart(product, quantity, desiredLocation);
+      setShowDropdown(false);
+    }
+  };
+
+  const handleAddToCartDropdown = () => {
+    setShowDropdown((prevValue) => !prevValue);
   };
 
   return (
     <div className="product-card">
-      <img
-        src={product.imageUrl}
-        alt={product.name}
-        className="product-image"
-      />
+      <img src={product?.imageUrl} alt="" className="product-image" />
       <div className="product-info">
-        <h2 className="product-name">{product.name}</h2>
-        <span className="product-category">{product.category.name}</span>
-        <p className="product-price">{product.price.toFixed(2)} RON</p>
-        <p className="product-weight">Weight: {product.weight} kg</p>
-        <p className="product-supplier">Supplier: {product.supplier}</p>
+        <h2 className="product-name">{product?.name}</h2>
+        <span className="product-category">{product?.category.name}</span>
+        <p className="product-price">{product?.price as number} RON</p>
+        <p className="product-supplier">From {product?.supplier}</p>
       </div>
       <div className="product-actions">
-        <label htmlFor="location" className="location-label">
-          Location:
-        </label>
-        <input
-          type="text"
-          id="location"
-          className="location-input"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-        />
-        <label htmlFor="quantity" className="quantity-label">
-          Quantity:
-        </label>
-        <input
-          type="number"
-          id="quantity"
-          className="quantity-input"
-          value={quantity}
-          onChange={(e) => setQuantity(parseInt(e.target.value, 10))}
-          min="1"
-        />
-        <button className="btn btn-cart" onClick={handleAddToCart}>
+        <button className="btn" onClick={handleAddToCartDropdown}>
           <FaShoppingCart className="icon" />
         </button>
+        <Link to={`/products/${product?.id}`} className="btn btn-details">
+          <FaInfoCircle className="icon" />
+        </Link>
       </div>
+      {showDropdown && <AddToCartDropdown onAddToCart={handleAddToCart} availableLocations={availableLocations} />}
     </div>
   );
 };

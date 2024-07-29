@@ -1,6 +1,6 @@
 import './CartTotal.scss';
 
-import { ICartItem } from '../../../interfaces/cart/cart-item.interface';
+import { ICartItem } from '../../../interfaces/cart-item.interface';
 import React from 'react';
 
 type Props = {
