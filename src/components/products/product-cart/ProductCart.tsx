@@ -3,18 +3,21 @@ import './ProductCard.scss';
 import { FaInfoCircle, FaShoppingCart } from 'react-icons/fa';
 import React, { useState } from 'react';
 
-import AddToCartDropdown from '../product-dropdown/AddToCartDropdown';
-import { ILocation } from '../../../interfaces/location.interface';
-import { IProduct } from '../../../interfaces/product.interface';
+import { AddToCartDropdown } from '../product-dropdown/AddToCartDropdown';
+import { ILocation } from '../../../types/locations/location.interface';
+import { IProduct } from '../../../types/products/product.interface';
 import { Link } from 'react-router-dom';
 import { useCart } from '../../../context/CartContext';
 
-type Props = {
+type ProductCardProps = {
   product: IProduct | undefined;
   availableLocations: ILocation[] | undefined;
 };
 
-const ProductCard: React.FC<Props> = ({ product, availableLocations }) => {
+export const ProductCard: React.FC<ProductCardProps> = ({
+  product,
+  availableLocations,
+}) => {
   const { addToCart } = useCart();
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -46,9 +49,12 @@ const ProductCard: React.FC<Props> = ({ product, availableLocations }) => {
           <FaInfoCircle className="icon" />
         </Link>
       </div>
-      {showDropdown && <AddToCartDropdown onAddToCart={handleAddToCart} availableLocations={availableLocations} />}
+      {showDropdown && (
+        <AddToCartDropdown
+          onAddToCart={handleAddToCart}
+          availableLocations={availableLocations}
+        />
+      )}
     </div>
   );
 };
-
-export default ProductCard;

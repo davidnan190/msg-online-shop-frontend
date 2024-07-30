@@ -2,15 +2,15 @@ import './ProductDetailsActions.scss';
 
 import React, { useState } from 'react';
 
-import { ILocation } from '../../../interfaces/location.interface';
+import { ILocation } from '../../../types/locations/location.interface';
 
-type Props = {
+type ProductDetailsActionsProps = {
   onAddToCart: (quantity: number, location: ILocation) => void;
   onDeleteProduct: () => void;
   availableLocations: ILocation[] | undefined;
 };
 
-const ProductDetailsActions: React.FC<Props> = ({
+export const ProductDetailsActions: React.FC<ProductDetailsActionsProps> = ({
   onAddToCart,
   onDeleteProduct,
   availableLocations,
@@ -71,5 +71,3 @@ const ProductDetailsActions: React.FC<Props> = ({
     </div>
   );
 };
-
-export default ProductDetailsActions;

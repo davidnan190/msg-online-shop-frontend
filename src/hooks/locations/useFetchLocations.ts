@@ -2,9 +2,9 @@ import axios, { CancelTokenSource } from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 
 import { ERROR_REQUEST_CANCELLED_BY_CLIENT } from '../../constants/api.constants';
-import { ILocation } from '../../interfaces/location.interface';
+import { ILocation } from '../../types/locations/location.interface';
 import { locationService } from '../../services/location.service';
-import log from '../../utils/log.utils';
+import { useLogger } from '../../context/LoggerContext';
 
 type FetchResult = {
   locations: ILocation[] | undefined;
@@ -12,10 +12,12 @@ type FetchResult = {
   error: string | null;
 };
 
-const useFetchLocations = (): FetchResult => {
+export const useFetchLocations = (): FetchResult => {
   const [locations, setLocations] = useState<ILocation[] | undefined>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  const logger = useLogger();
 
   const fetchLocations = useCallback(async (cancelToken: CancelTokenSource) => {
     setIsLoading(true);
@@ -24,7 +26,10 @@ const useFetchLocations = (): FetchResult => {
     try {
       const data = await locationService.getAllLocations(cancelToken);
       setLocations(data);
-      log.debug(data);
+      logger.debug(`Fetch Locations Data: ${data}`, {
+        hook: 'useFetchLocation',
+        action: 'fetchLocations',
+      });
     } catch (err) {
       if (!axios.isCancel(err)) setError((err as Error).message);
     } finally {
@@ -44,5 +49,3 @@ const useFetchLocations = (): FetchResult => {
 
   return { locations, isLoading, error };
 };
-
-export default useFetchLocations;

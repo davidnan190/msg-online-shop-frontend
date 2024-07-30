@@ -2,17 +2,16 @@ import './PlaceOrderPage.scss';
 
 import React, { useState } from 'react';
 
-import CartItem from '../../components/cart/cart-item/CartItem';
-import CartTotal from '../../components/cart/cart-total/CartTotal';
+import { CartItem } from '../../components/cart/cart-item/CartItem';
+import { CartTotal } from '../../components/cart/cart-total/CartTotal';
 import { CreateOrderRequest } from '../../types/orders/create-order-request.type';
 import { TEMP_HARDCODED_CUSTOMER_ID } from '../../constants/api.constants';
-import { customerService } from '../../services/customer.service';
-import log from '../../utils/log.utils';
 import { useCart } from '../../context/CartContext';
-import useFetchCustomer from '../../hooks/customers/useFetchCustomer';
-import usePlaceOrder from '../../hooks/orders/usePlaceOrder';
+import { useFetchCustomer } from '../../hooks/customers/useFetchCustomer';
+import { useLogger } from '../../context/LoggerContext';
+import { usePlaceOrder } from '../../hooks/orders/usePlaceOrder';
 
-const PlaceOrderPage: React.FC = () => {
+export const PlaceOrderPage: React.FC = () => {
   const { cart, clearCart } = useCart();
   const {
     customer,
@@ -29,6 +28,8 @@ const PlaceOrderPage: React.FC = () => {
   const [city, setCity] = useState('');
   const [county, setCounty] = useState('');
   const [streetAddress, setStreetAddress] = useState('');
+
+  const logger = useLogger();
 
   const handlePlaceOrder = async () => {
     if (!customer) {
@@ -49,7 +50,10 @@ const PlaceOrderPage: React.FC = () => {
     };
 
     const createdOrder = await placeOrder(orderData);
-    log.debug(orderData);
+    logger.debug(`Created Order Data: ${createdOrder}`, {
+      component: 'PlaceOrderPage',
+      action: 'handlePlaceOrder',
+    });
     if (createdOrder) {
       clearCart();
       alert('Order placed successfully!');
@@ -121,5 +125,3 @@ const PlaceOrderPage: React.FC = () => {
     </>
   );
 };
-
-export default PlaceOrderPage;

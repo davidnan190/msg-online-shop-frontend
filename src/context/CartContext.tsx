@@ -6,11 +6,11 @@ import React, {
   useState,
 } from 'react';
 
-import { ICartItem } from '../interfaces/cart-item.interface';
-import { ILocation } from '../interfaces/location.interface';
-import { IProduct } from '../interfaces/product.interface';
+import { ICartItem } from '../types/cart/cart-item.interface';
+import { ILocation } from '../types/locations/location.interface';
+import { IProduct } from '../types/products/product.interface';
 
-interface CartContextProps {
+interface ICartContextProps {
   cart: ICartItem[];
   addToCart: (product: IProduct, quantity: number, location: ILocation) => void;
   updateQuantity: (productId: string, quantity: number) => void;
@@ -18,9 +18,11 @@ interface CartContextProps {
   clearCart: () => void;
 }
 
-const CartContext = createContext<CartContextProps | undefined>(undefined);
+const CartContext = createContext<ICartContextProps | undefined>(undefined);
 
-export const useCart = (): CartContextProps => {
+const CART_LOCAL_STORAGE_KEY = 'cart';
+
+export const useCart = (): ICartContextProps => {
   const context = useContext(CartContext);
   if (context === undefined) {
     throw new Error('useCart must be used within a CartProvider');
@@ -32,12 +34,12 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [cart, setCart] = useState<ICartItem[]>(() => {
-    const savedCart = localStorage.getItem('cart');
+    const savedCart = localStorage.getItem(CART_LOCAL_STORAGE_KEY);
     return savedCart ? JSON.parse(savedCart) : [];
   });
 
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cart));
+    localStorage.setItem(CART_LOCAL_STORAGE_KEY, JSON.stringify(cart));
   }, [cart]);
 
   const addToCart = (

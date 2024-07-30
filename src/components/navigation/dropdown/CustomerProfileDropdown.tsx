@@ -2,18 +2,18 @@ import './CustomerProfileDropdown.scss';
 
 import React, { useState } from 'react';
 
-import { ICustomer } from '../../../interfaces/customer.interface';
+import { ICustomer } from '../../../types/customers/customer.interface';
 import { NavLink } from 'react-router-dom';
 
-type Props = {
+type CustomerProfileDropdownProps = {
   customer: ICustomer | undefined;
   isLoading: boolean;
 };
 
-const CustomerProfileDropdown: React.FC<Props> = ({
+const CustomerProfileDropdown: React.FC<CustomerProfileDropdownProps> = ({
   customer,
   isLoading,
-}: Props) => {
+}) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
@@ -34,7 +34,7 @@ const CustomerProfileDropdown: React.FC<Props> = ({
           <li>
             <NavLink to="/profile/details" end className="dropdown-item">
               <img
-                src='https://via.placeholder.com/480'
+                src="https://via.placeholder.com/480"
                 alt={customer?.firstName}
                 className="profile-pic-small"
               />

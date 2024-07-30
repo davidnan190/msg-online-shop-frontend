@@ -2,12 +2,10 @@ import './ProductDetailsImage.scss';
 
 import React from 'react';
 
-type Props = {
+type ProductDetailsImageProps = {
   imageUrl: string;
 };
 
-const ProductDetailsImage: React.FC<Props> = ({ imageUrl }) => {
+export const ProductDetailsImage: React.FC<ProductDetailsImageProps> = ({ imageUrl }) => {
   return <img src={imageUrl} alt="IProduct" className="product-image" />;
 };
-
-export default ProductDetailsImage;

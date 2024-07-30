@@ -1,13 +1,13 @@
 import './ProductDetailsInfo.scss';
 
-import { IProduct } from '../../../interfaces/product.interface';
+import { IProduct } from '../../../types/products/product.interface';
 import React from 'react';
 
-type Props = {
+type ProductDetailsInfoProps = {
   product: IProduct;
 };
 
-const ProductDetailsInfo: React.FC<Props> = ({ product }) => {
+export const ProductDetailsInfo: React.FC<ProductDetailsInfoProps> = ({ product }) => {
   return (
     <div className="product-info">
       <h1 className="product-name">{product.name}</h1>
@@ -19,5 +19,3 @@ const ProductDetailsInfo: React.FC<Props> = ({ product }) => {
     </div>
   );
 };
-
-export default ProductDetailsInfo;

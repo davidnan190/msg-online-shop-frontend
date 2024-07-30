@@ -1,5 +1,5 @@
 import { CreateOrderRequest } from '../../types/orders/create-order-request.type';
-import { IOrder } from '../../interfaces/order.interface';
+import { IOrder } from '../../types/orders/order.interface';
 import axios from 'axios';
 import { orderService } from '../../services/order.service';
 import { useState } from 'react';
@@ -10,7 +10,7 @@ type PlaceOrderResult = {
   placeOrder: (orderData: CreateOrderRequest) => Promise<IOrder | undefined>;
 };
 
-const usePlaceOrder = (): PlaceOrderResult => {
+export const usePlaceOrder = (): PlaceOrderResult => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -39,5 +39,3 @@ const usePlaceOrder = (): PlaceOrderResult => {
 
   return { isLoading, error, placeOrder };
 };
-
-export default usePlaceOrder;

@@ -2,39 +2,48 @@ import './AddToCartDropdown.scss';
 
 import React, { useState } from 'react';
 
-import { ILocation } from '../../../interfaces/location.interface';
+import { ILocation } from '../../../types/locations/location.interface';
 
-type Props = {
+type AddToCartDropdownProps = {
   availableLocations: ILocation[] | undefined;
   onAddToCart: (quantity: number, location: ILocation) => void;
 };
 
-const AddToCartDropdown: React.FC<Props> = ({ availableLocations, onAddToCart }) => {
+export const AddToCartDropdown: React.FC<AddToCartDropdownProps> = ({
+  availableLocations,
+  onAddToCart,
+}) => {
   const [quantity, setQuantity] = useState<number>(1);
-  const [selectedLocation, setSelectedLocation] = useState<ILocation | undefined>(
-    availableLocations ? availableLocations[0] : undefined
-  );
+  const [selectedLocation, setSelectedLocation] = useState<
+    ILocation | undefined
+  >(availableLocations ? availableLocations[0] : undefined);
 
   return (
     <div className="add-to-cart-dropdown">
-      <label htmlFor="location" className="location-label">Location:</label>
+      <label htmlFor="location" className="location-label">
+        Location:
+      </label>
       <select
         id="location"
         className="location-select"
         value={selectedLocation?.id}
         onChange={(e) => {
-          const location = availableLocations?.find(loc => loc.id === e.target.value);
+          const location = availableLocations?.find(
+            (loc) => loc.id === e.target.value
+          );
           setSelectedLocation(location);
         }}
       >
-        {availableLocations?.map(location => (
+        {availableLocations?.map((location) => (
           <option key={location.id} value={location.id}>
             {location.name} {location.city ? `(${location.city})` : ''}
           </option>
         ))}
       </select>
 
-      <label htmlFor="quantity" className="quantity-label">Quantity:</label>
+      <label htmlFor="quantity" className="quantity-label">
+        Quantity:
+      </label>
       <input
         type="number"
         id="quantity"
@@ -55,5 +64,3 @@ const AddToCartDropdown: React.FC<Props> = ({ availableLocations, onAddToCart })
     </div>
   );
 };
-
-export default AddToCartDropdown;

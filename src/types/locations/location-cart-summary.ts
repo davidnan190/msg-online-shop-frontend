@@ -1,3 +1,3 @@
-import { ILocation } from '../../interfaces/location.interface';
+import { ILocation } from './location.interface';
 
 export type LocationCartSummary = Pick<ILocation, 'id' | 'name'>;

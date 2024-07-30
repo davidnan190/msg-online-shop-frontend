@@ -1,19 +1,16 @@
 import './ProductsPage.scss';
 
-import ProductCard from '../../components/products/product-card/ProductCard';
-import useFetchLocations from '../../hooks/locations/useFetchLocations';
-import useFetchProducts from '../../hooks/products/useFetchProducts';
+import { ProductCard } from '../../components/products/product-card/ProductCard';
+import { useFetchLocations } from '../../hooks/locations/useFetchLocations';
+import { useFetchProducts } from '../../hooks/products/useFetchProducts';
 
-const ProductsPage: React.FC = () => {
+export const ProductsPage: React.FC = () => {
   const {
     products,
     isLoading: isProductsLoading,
     error: productsError,
   } = useFetchProducts();
-  const {
-    locations,
-    error: locationsError,
-  } = useFetchLocations();
+  const { locations, error: locationsError } = useFetchLocations();
 
   if (isProductsLoading) return <p>Loading...</p>;
 
@@ -48,5 +45,3 @@ const ProductsPage: React.FC = () => {
     </>
   );
 };
-
-export default ProductsPage;

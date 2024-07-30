@@ -2,17 +2,16 @@ import './ProductDetailsPage.scss';
 
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { ILocation } from '../../interfaces/location.interface';
-import ProductDetailsActions from '../../components/products/product-details-actions/ProductDetailsActions';
-import ProductDetailsImage from '../../components/products/product-details-image/ProductDetailsImage';
-import ProductDetailsInfo from '../../components/products/product-details-info/ProductDetailsInfo';
-import React from 'react';
+import { ILocation } from '../../types/locations/location.interface';
+import { ProductDetailsActions } from '../../components/products/product-details-actions/ProductDetailsActions';
+import { ProductDetailsImage } from '../../components/products/product-details-image/ProductDetailsImage';
+import { ProductDetailsInfo } from '../../components/products/product-details-info/ProductDetailsInfo';
 import { useCart } from '../../context/CartContext';
 import useDeleteProduct from '../../hooks/products/useDeleteProduct';
-import useFetchLocations from '../../hooks/locations/useFetchLocations';
+import { useFetchLocations } from '../../hooks/locations/useFetchLocations';
 import useFetchProduct from '../../hooks/products/useFetchProduct';
 
-const ProductDetailsPage: React.FC = () => {
+export const ProductDetailsPage: React.FC = () => {
   const { productId } = useParams<{ productId: string }>();
   const navigate = useNavigate();
   const { addToCart } = useCart();
@@ -73,5 +72,3 @@ const ProductDetailsPage: React.FC = () => {
     </div>
   );
 };
-
-export default ProductDetailsPage;

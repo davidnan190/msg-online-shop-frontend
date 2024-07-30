@@ -1,56 +1,34 @@
-import axios, { AxiosResponse, CancelTokenSource } from 'axios';
-
+import { BaseService } from './base.service';
+import { CancelTokenSource } from 'axios';
 import { CreateOrderRequest } from '../types/orders/create-order-request.type';
-import { ERROR_REQUEST_CANCELLED_BY_CLIENT } from '../constants/api.constants';
-import { IOrder } from '../interfaces/order.interface';
-import axiosInstance from '../api/axios-instance';
-import { handleApiError } from '../utils/request.utils';
-import log from '../utils/log.utils';
+import { HttpMethod } from '../enums/http-method.enum';
+import { IOrder } from '../types/orders/order.interface';
 
-class OrderService {
+class OrderService extends BaseService {
   private readonly ORDERS_FEATURE_URL_PREFIX = '/orders';
 
-  public async placeOrder(
+  public placeOrder(
     orderData: CreateOrderRequest,
     cancelToken: CancelTokenSource
-  ) {
-    try {
-      const response: AxiosResponse<IOrder | undefined> =
-        await axiosInstance.post<IOrder>(
-          this.ORDERS_FEATURE_URL_PREFIX,
-          orderData,
-          {
-            cancelToken: cancelToken.token,
-          }
-        );
-      return response.data;
-    } catch (error) {
-      if (axios.isCancel(error)) {
-        log.debug(ERROR_REQUEST_CANCELLED_BY_CLIENT);
-      } else {
-        handleApiError(error);
-      }
-    }
+  ): Promise<IOrder | undefined> {
+    return this.request<IOrder>(
+      HttpMethod.POST,
+      this.ORDERS_FEATURE_URL_PREFIX,
+      orderData,
+      cancelToken
+    );
   }
 
-  public async getOrdersByCustomerId(
+  public getOrdersByCustomerId(
     customerId: string,
     cancelToken: CancelTokenSource
-  ) {
-    try {
-      const response: AxiosResponse<IOrder[]> = await axiosInstance.get<
-        IOrder[]
-      >(`${this.ORDERS_FEATURE_URL_PREFIX}/customer/${customerId}`, {
-        cancelToken: cancelToken.token,
-      });
-      return response.data;
-    } catch (error) {
-      if (axios.isCancel(error)) {
-        log.debug(ERROR_REQUEST_CANCELLED_BY_CLIENT);
-      } else {
-        handleApiError(error);
-      }
-    }
+  ): Promise<IOrder[] | undefined> {
+    return this.request<IOrder[]>(
+      HttpMethod.GET,
+      `${this.ORDERS_FEATURE_URL_PREFIX}/customer/${customerId}`,
+      undefined,
+      cancelToken
+    );
   }
 }
 
