@@ -1,7 +1,10 @@
-import { ABORT_ERROR, ERROR_REQUEST_CANCELLED_BY_CLIENT } from '../../constants/api.constants';
+import {
+  ABORT_ERROR,
+  ERROR_REQUEST_CANCELLED_BY_CLIENT,
+} from '../../constants/api.constants';
 import { useEffect, useState } from 'react';
 
-import { ICustomer } from '../../interfaces/customer.interface';
+import { ICustomer } from '../../types/customers/customer.interface';
 import { customerService } from '../../services/customer.service';
 
 type FetchResult = {
@@ -10,7 +13,7 @@ type FetchResult = {
   error: string | null;
 };
 
-const useFetchCustomer = (productId: string): FetchResult => {
+export const useFetchCustomer = (productId: string): FetchResult => {
   const [customer, setCustomer] = useState<ICustomer | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -18,7 +21,10 @@ const useFetchCustomer = (productId: string): FetchResult => {
   useEffect(() => {
     const controller = new AbortController();
 
-    const fetchCustomerById = async (customerId: string, signal: AbortSignal) => {
+    const fetchCustomerById = async (
+      customerId: string,
+      signal: AbortSignal
+    ) => {
       setIsLoading(true);
       setError(null);
 
@@ -43,5 +49,3 @@ const useFetchCustomer = (productId: string): FetchResult => {
 
   return { customer, isLoading, error };
 };
-
-export default useFetchCustomer;

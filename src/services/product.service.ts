@@ -1,98 +1,44 @@
-import axios, { AxiosResponse, CancelTokenSource } from 'axios';
+import { BaseService } from './base.service';
+import { CancelTokenSource } from 'axios';
+import { HttpMethod } from '../enums/http-method.enum';
+import { IProduct } from '../types/products/product.interface';
 
-import { ERROR_REQUEST_CANCELLED_BY_CLIENT } from '../constants/api.constants';
-import { IProduct } from '../interfaces/product.interface';
-import { UpdateProductRequest } from '../types/products/update-product-request.type';
-import axiosInstance from '../api/axios-instance';
-import { handleApiError } from '../utils/request.utils';
-import log from '../utils/log.utils';
-
-class ProductService {
+class ProductService extends BaseService {
   private readonly PRODUCTS_FEATURE_URL_PREFIX = '/products';
-  public async getAllProducts(
+
+  public getAllProducts(
     cancelToken: CancelTokenSource
   ): Promise<IProduct[] | undefined> {
-    try {
-      const response: AxiosResponse<IProduct[]> = await axiosInstance.get<
-        IProduct[]
-      >(this.PRODUCTS_FEATURE_URL_PREFIX, {
-        cancelToken: cancelToken.token,
-      });
-      return response.data;
-    } catch (error) {
-      if (axios.isCancel(error)) {
-        log.debug(ERROR_REQUEST_CANCELLED_BY_CLIENT);
-      } else {
-        handleApiError(error);
-      }
-    }
+    return this.request<IProduct[]>(
+      HttpMethod.GET,
+      this.PRODUCTS_FEATURE_URL_PREFIX,
+      undefined,
+      cancelToken
+    );
   }
 
-  public async getProductById(
+  public getProductById(
     productId: string,
     cancelToken: CancelTokenSource
   ): Promise<IProduct | undefined> {
-    try {
-      const response: AxiosResponse<IProduct> =
-        await axiosInstance.get<IProduct>(
-          `${this.PRODUCTS_FEATURE_URL_PREFIX}/${productId}`,
-          {
-            cancelToken: cancelToken.token,
-          }
-        );
-      return response.data;
-    } catch (error) {
-      if (axios.isCancel(error)) {
-        log.debug(ERROR_REQUEST_CANCELLED_BY_CLIENT);
-      } else {
-        handleApiError(error);
-      }
-    }
+    return this.request<IProduct>(
+      HttpMethod.GET,
+      `${this.PRODUCTS_FEATURE_URL_PREFIX}/${productId}`,
+      undefined,
+      cancelToken
+    );
   }
 
-  public async updateProductById(
-    updatedData: UpdateProductRequest,
-    cancelToken: CancelTokenSource
-  ): Promise<IProduct | undefined> {
-    try {
-      const response: AxiosResponse<IProduct | undefined> =
-        await axiosInstance.patch<IProduct>(
-          `${this.PRODUCTS_FEATURE_URL_PREFIX}/${updatedData.id}`,
-          updatedData,
-          {
-            cancelToken: cancelToken.token,
-          }
-        );
-      return response.data;
-    } catch (error) {
-      if (axios.isCancel(error)) {
-        log.debug(ERROR_REQUEST_CANCELLED_BY_CLIENT);
-      } else {
-        handleApiError(error);
-      }
-    }
-  }
-
-  public async deleteProductById(
+  public deleteProductById(
     productId: string,
     cancelToken: CancelTokenSource
   ): Promise<IProduct | undefined> {
-    try {
-      const response: AxiosResponse<IProduct> =
-        await axiosInstance.delete<IProduct>(
-          `${this.PRODUCTS_FEATURE_URL_PREFIX}/${productId}`,
-          {
-            cancelToken: cancelToken.token,
-          }
-        );
-      return response.data;
-    } catch (error) {
-      if (axios.isCancel(error)) {
-        log.debug(ERROR_REQUEST_CANCELLED_BY_CLIENT);
-      } else {
-        handleApiError(error);
-      }
-    }
+    return this.request<IProduct>(
+      HttpMethod.DELETE,
+      `${this.PRODUCTS_FEATURE_URL_PREFIX}/${productId}`,
+      undefined,
+      cancelToken
+    );
   }
 }
 

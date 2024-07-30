@@ -1,14 +1,14 @@
 import './CartItem.scss';
 
-import { ICartItem } from '../../../interfaces/cart-item.interface';
+import { ICartItem } from '../../../types/cart/cart-item.interface';
 import React from 'react';
 import { useCart } from '../../../context/CartContext';
 
-type Props = {
+type CartItemProps = {
   item: ICartItem;
 };
 
-const CartItem: React.FC<Props> = ({ item }) => {
+export const CartItem: React.FC<CartItemProps> = ({ item }) => {
   const { updateQuantity, removeFromCart } = useCart();
 
   const handleQuantityChange = (quantity: number) => {
@@ -57,5 +57,3 @@ const CartItem: React.FC<Props> = ({ item }) => {
     </div>
   );
 };
-
-export default CartItem;

@@ -2,9 +2,9 @@ import axios, { CancelTokenSource } from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 
 import { ERROR_REQUEST_CANCELLED_BY_CLIENT } from '../../constants/api.constants';
-import { IProduct } from '../../interfaces/product.interface';
-import log from '../../utils/log.utils';
+import { IProduct } from '../../types/products/product.interface';
 import { productService } from '../../services/product.service';
+import { useLogger } from '../../context/LoggerContext';
 
 type FetchResult = {
   products: IProduct[] | undefined;
@@ -12,10 +12,12 @@ type FetchResult = {
   error: string | null;
 };
 
-const useFetchProducts = (): FetchResult => {
+export const useFetchProducts = (): FetchResult => {
   const [products, setProducts] = useState<IProduct[] | undefined>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  const logger = useLogger();
 
   const fetchProducts = useCallback(async (cancelToken: CancelTokenSource) => {
     setIsLoading(true);
@@ -24,7 +26,10 @@ const useFetchProducts = (): FetchResult => {
     try {
       const data = await productService.getAllProducts(cancelToken);
       setProducts(data);
-      log.debug(data);
+      logger.debug(`Fetch Products Data: ${data}`, {
+        hook: 'useFetchProducts',
+        action: 'fetchProducts',
+      });
     } catch (err) {
       if (!axios.isCancel(err)) setError((err as Error).message);
     } finally {
@@ -44,5 +49,3 @@ const useFetchProducts = (): FetchResult => {
 
   return { products, isLoading, error };
 };
-
-export default useFetchProducts;

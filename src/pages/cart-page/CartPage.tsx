@@ -1,12 +1,12 @@
 import './CartPage.scss';
 
-import CartActions from '../../components/cart/cart-actions/CartActions';
-import CartItem from '../../components/cart/cart-item/CartItem';
-import CartTotal from '../../components/cart/cart-total/CartTotal';
+import { CartActions } from '../../components/cart/cart-actions/CartActions';
+import { CartItem } from '../../components/cart/cart-item/CartItem';
+import { CartTotal } from '../../components/cart/cart-total/CartTotal';
 import { useCart } from '../../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 
-const CartPage: React.FC = () => {
+export const CartPage: React.FC = () => {
   const { cart, clearCart } = useCart();
 
   const navigate = useNavigate();
@@ -24,19 +24,16 @@ const CartPage: React.FC = () => {
         ))}
         <CartTotal cart={cart} />
         <CartActions clearCart={clearCart} />
-        
       </div>
       <div className="checkout-button-container">
-          <button
-            className="checkout-button"
-            disabled={cart.length === 0}
-            onClick={() => navigate('/place-order')}
-          >
-            Proceed to Checkout
-          </button>
-        </div>
+        <button
+          className="checkout-button"
+          disabled={cart.length === 0}
+          onClick={() => navigate('/place-order')}
+        >
+          Proceed to Checkout
+        </button>
+      </div>
     </>
   );
 };
-
-export default CartPage;

@@ -1,5 +1,5 @@
 import { DesiredOrderItem } from './desired-order-item.type';
-import { IOrder } from '../../interfaces/order.interface';
+import { IOrder } from './order.interface';
 
 export type CreateOrderRequest = Omit<
   IOrder,

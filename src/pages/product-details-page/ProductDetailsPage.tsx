@@ -3,16 +3,16 @@ import './ProductDetailsPage.scss';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { ILocation } from '../../interfaces/location.interface';
-import ProductDetailsActions from '../../components/products/product-details-actions/ProductDetailsActions';
-import ProductDetailsImage from '../../components/products/product-details-image/ProductDetailsImage';
-import ProductDetailsInfo from '../../components/products/product-details-info/ProductDetailsInfo';
+import { ILocation } from '../../types/locations/location.interface';
+import { ProductDetailsActions } from '../../components/products/product-details-actions/ProductDetailsActions';
+import { ProductDetailsImage } from '../../components/products/product-details-image/ProductDetailsImage';
+import { ProductDetailsInfo } from '../../components/products/product-details-info/ProductDetailsInfo';
 import { useCart } from '../../context/CartContext';
-import useDeleteProduct from '../../hooks/products/useDeleteProduct';
-import useFetchLocations from '../../hooks/locations/useFetchLocations';
-import useFetchProduct from '../../hooks/products/useFetchProduct';
+import { useDeleteProduct } from '../../hooks/products/useDeleteProduct';
+import { useFetchLocations } from '../../hooks/locations/useFetchLocations';
+import { useFetchProduct } from '../../hooks/products/useFetchProduct';
 import { useForm } from 'react-hook-form';
-import useUpdateProduct from '../../hooks/products/useUpdateProduct';
+import { useUpdateProduct } from '../../hooks/products/useUpdateProduct';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -27,7 +27,7 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-const ProductDetailsPage: React.FC = () => {
+export const ProductDetailsPage: React.FC = () => {
   const { productId } = useParams<{ productId: string }>();
   const navigate = useNavigate();
   const { addToCart } = useCart();
@@ -192,5 +192,3 @@ const ProductDetailsPage: React.FC = () => {
     </div>
   );
 };
-
-export default ProductDetailsPage;

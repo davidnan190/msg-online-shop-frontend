@@ -1,3 +1,3 @@
-import { IProduct } from '../../interfaces/product.interface';
+import { IProduct } from './product.interface';
 
 export type ProductCartSummary = Omit<IProduct, 'description'>;

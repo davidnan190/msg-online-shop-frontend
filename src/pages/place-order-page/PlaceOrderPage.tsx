@@ -1,15 +1,15 @@
 import './PlaceOrderPage.scss';
 
-import CartItem from '../../components/cart/cart-item/CartItem';
-import CartTotal from '../../components/cart/cart-total/CartTotal';
+import { CartItem } from '../../components/cart/cart-item/CartItem';
+import { CartTotal } from '../../components/cart/cart-total/CartTotal';
 import { CreateOrderRequest } from '../../types/orders/create-order-request.type';
 import React from 'react';
 import { TEMP_HARDCODED_CUSTOMER_ID } from '../../constants/api.constants';
-import log from '../../utils/log.utils';
 import { useCart } from '../../context/CartContext';
-import useFetchCustomer from '../../hooks/customers/useFetchCustomer';
+import { useFetchCustomer } from '../../hooks/customers/useFetchCustomer';
 import { useForm } from 'react-hook-form';
-import usePlaceOrder from '../../hooks/orders/usePlaceOrder';
+import { useLogger } from '../../context/LoggerContext';
+import { usePlaceOrder } from '../../hooks/orders/usePlaceOrder';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -21,7 +21,7 @@ const schema = z.object({
 });
 type FormData = z.infer<typeof schema>;
 
-const PlaceOrderPage: React.FC = () => {
+export const PlaceOrderPage: React.FC = () => {
   const { cart, clearCart } = useCart();
   const {
     customer,
@@ -33,6 +33,8 @@ const PlaceOrderPage: React.FC = () => {
     error: placeOrderError,
     placeOrder,
   } = usePlaceOrder();
+
+  const logger = useLogger()
 
   const {
     register,
@@ -61,7 +63,10 @@ const PlaceOrderPage: React.FC = () => {
     };
 
     const createdOrder = await placeOrder(orderData);
-    log.debug(orderData);
+    logger.debug(`Created Order Data: ${createdOrder}`, {
+      component: 'PlaceOrderPage',
+      action: 'handlePlaceOrder',
+    });
     if (createdOrder) {
       clearCart();
       alert('Order placed successfully!');
@@ -128,5 +133,3 @@ const PlaceOrderPage: React.FC = () => {
     </>
   );
 };
-
-export default PlaceOrderPage;

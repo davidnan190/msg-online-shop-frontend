@@ -1,4 +1,4 @@
-import { IOrderDetail } from './order-detail.interface';
+import { IOrderDetail } from "./order-detail.interface";
 
 export interface IOrder {
   id: string;

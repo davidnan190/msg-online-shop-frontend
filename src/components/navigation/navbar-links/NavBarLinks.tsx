@@ -1,15 +1,15 @@
 import './NavBarLinks.scss';
 
-import { ICustomer } from '../../../interfaces/customer.interface';
+import { ICustomer } from '../../../types/customers/customer.interface';
 import { NavLink } from 'react-router-dom';
 import React from 'react';
 import { Role } from '../../../enums/role.enum';
 
-type Props = {
+type NavBarLinksProps = {
   customer: ICustomer | undefined;
 };
 
-const NavBarLinks: React.FC<Props> = ({ customer }) => {
+export const NavBarLinks: React.FC<NavBarLinksProps> = ({ customer }) => {
   return (
     <ul className="navbar-nav">
       <li className="nav-item">
@@ -34,5 +34,3 @@ const NavBarLinks: React.FC<Props> = ({ customer }) => {
     </ul>
   );
 };
-
-export default NavBarLinks;

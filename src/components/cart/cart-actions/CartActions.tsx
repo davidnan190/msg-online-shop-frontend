@@ -2,11 +2,11 @@ import './CartActions.scss';
 
 import React from 'react';
 
-type Props = {
+type CartActionsProps = {
   clearCart: () => void;
 };
 
-const CartActions: React.FC<Props> = ({ clearCart }) => {
+export const CartActions: React.FC<CartActionsProps> = ({ clearCart }) => {
   return (
     <div className="cart-actions">
       <button className="btn-clear" onClick={clearCart}>
@@ -15,5 +15,3 @@ const CartActions: React.FC<Props> = ({ clearCart }) => {
     </div>
   );
 };
-
-export default CartActions;

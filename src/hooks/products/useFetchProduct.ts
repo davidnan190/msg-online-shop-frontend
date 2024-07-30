@@ -2,7 +2,7 @@ import axios, { CancelTokenSource } from 'axios';
 import { useEffect, useState } from 'react';
 
 import { ERROR_REQUEST_CANCELLED_BY_CLIENT } from '../../constants/api.constants';
-import { IProduct } from '../../interfaces/product.interface';
+import { IProduct } from '../../types/products/product.interface';
 import { productService } from '../../services/product.service';
 
 type FetchResult = {

@@ -5,9 +5,8 @@ import {
 } from '../constants/api.constants';
 
 import { HttpMethod } from '../enums/http-method.enum';
-import { ICustomer } from '../interfaces/customer.interface';
+import { ICustomer } from '../types/customers/customer.interface';
 import { handleApiError } from '../utils/request.utils';
-import log from '../utils/log.utils';
 
 class CustomerService {
   private readonly CUSTOMERS_FEATURE_BASE_URL = `${BACKEND_BASE_URL}/customers`;
@@ -46,7 +45,7 @@ class CustomerService {
       return await response.json();
     } catch (error) {
       if ((error as Error).name === ABORT_ERROR) {
-        log.debug(ERROR_REQUEST_CANCELLED_BY_CLIENT);
+        console.debug(ERROR_REQUEST_CANCELLED_BY_CLIENT)
       } else {
         handleApiError(error);
       }
