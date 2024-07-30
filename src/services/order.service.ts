@@ -13,7 +13,7 @@ class OrderService {
   public async placeOrder(
     orderData: CreateOrderRequest,
     cancelToken: CancelTokenSource
-  ) {
+  ): Promise<IOrder | undefined> {
     try {
       const response: AxiosResponse<IOrder | undefined> =
         await axiosInstance.post<IOrder>(
@@ -36,7 +36,7 @@ class OrderService {
   public async getOrdersByCustomerId(
     customerId: string,
     cancelToken: CancelTokenSource
-  ) {
+  ): Promise<IOrder[] | undefined> {
     try {
       const response: AxiosResponse<IOrder[]> = await axiosInstance.get<
         IOrder[]

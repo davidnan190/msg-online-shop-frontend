@@ -3,17 +3,26 @@ import './AddToCartDropdown.scss';
 import React, { useState } from 'react';
 
 import { ILocation } from '../../../interfaces/location.interface';
+import { z } from 'zod';
 
 type Props = {
   availableLocations: ILocation[] | undefined;
   onAddToCart: (quantity: number, location: ILocation) => void;
 };
 
+const schema = z.object({
+  quantity: z.number().min(1, 'Quantity must be at least 1'),
+  locationId: z.string().nonempty('Location is required'),
+});
+
+type FormData = z.infer<typeof schema>;
+
 const AddToCartDropdown: React.FC<Props> = ({ availableLocations, onAddToCart }) => {
   const [quantity, setQuantity] = useState<number>(1);
   const [selectedLocation, setSelectedLocation] = useState<ILocation | undefined>(
     availableLocations ? availableLocations[0] : undefined
   );
+  
 
   return (
     <div className="add-to-cart-dropdown">

@@ -2,6 +2,7 @@ import axios, { AxiosResponse, CancelTokenSource } from 'axios';
 
 import { ERROR_REQUEST_CANCELLED_BY_CLIENT } from '../constants/api.constants';
 import { IProduct } from '../interfaces/product.interface';
+import { UpdateProductRequest } from '../types/products/update-product-request.type';
 import axiosInstance from '../api/axios-instance';
 import { handleApiError } from '../utils/request.utils';
 import log from '../utils/log.utils';
@@ -35,6 +36,29 @@ class ProductService {
       const response: AxiosResponse<IProduct> =
         await axiosInstance.get<IProduct>(
           `${this.PRODUCTS_FEATURE_URL_PREFIX}/${productId}`,
+          {
+            cancelToken: cancelToken.token,
+          }
+        );
+      return response.data;
+    } catch (error) {
+      if (axios.isCancel(error)) {
+        log.debug(ERROR_REQUEST_CANCELLED_BY_CLIENT);
+      } else {
+        handleApiError(error);
+      }
+    }
+  }
+
+  public async updateProductById(
+    updatedData: UpdateProductRequest,
+    cancelToken: CancelTokenSource
+  ): Promise<IProduct | undefined> {
+    try {
+      const response: AxiosResponse<IProduct | undefined> =
+        await axiosInstance.patch<IProduct>(
+          `${this.PRODUCTS_FEATURE_URL_PREFIX}/${updatedData.id}`,
+          updatedData,
           {
             cancelToken: cancelToken.token,
           }

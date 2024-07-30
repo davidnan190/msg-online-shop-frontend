@@ -1,16 +1,25 @@
 import './PlaceOrderPage.scss';
 
-import React, { useState } from 'react';
-
 import CartItem from '../../components/cart/cart-item/CartItem';
 import CartTotal from '../../components/cart/cart-total/CartTotal';
 import { CreateOrderRequest } from '../../types/orders/create-order-request.type';
+import React from 'react';
 import { TEMP_HARDCODED_CUSTOMER_ID } from '../../constants/api.constants';
-import { customerService } from '../../services/customer.service';
 import log from '../../utils/log.utils';
 import { useCart } from '../../context/CartContext';
 import useFetchCustomer from '../../hooks/customers/useFetchCustomer';
+import { useForm } from 'react-hook-form';
 import usePlaceOrder from '../../hooks/orders/usePlaceOrder';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+const schema = z.object({
+  country: z.string().min(3, 'Country is required'),
+  city: z.string().min(3, 'City is required'),
+  county: z.string().min(3, 'County is required'),
+  streetAddress: z.string().min(3, 'Street address is required'),
+});
+type FormData = z.infer<typeof schema>;
 
 const PlaceOrderPage: React.FC = () => {
   const { cart, clearCart } = useCart();
@@ -25,21 +34,24 @@ const PlaceOrderPage: React.FC = () => {
     placeOrder,
   } = usePlaceOrder();
 
-  const [country, setCountry] = useState('');
-  const [city, setCity] = useState('');
-  const [county, setCounty] = useState('');
-  const [streetAddress, setStreetAddress] = useState('');
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
+  });
 
-  const handlePlaceOrder = async () => {
+  const onSubmit = async (data: FormData) => {
     if (!customer) {
       return;
     }
 
     const orderData: CreateOrderRequest = {
-      country,
-      city,
-      county,
-      streetAddress,
+      country: data.country,
+      city: data.city,
+      county: data.county,
+      streetAddress: data.streetAddress,
       customerId: customer?.id,
       desiredOrderItems: cart.map((item) => ({
         productId: item.product.id,
@@ -70,48 +82,43 @@ const PlaceOrderPage: React.FC = () => {
           <CartItem key={index} item={item} />
         ))}
         <CartTotal cart={cart} />
-        <form className="order-form">
+        <form className="order-form" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-group">
             <label htmlFor="country">Country</label>
-            <input
-              type="text"
-              id="country"
-              value={country}
-              onChange={(e) => setCountry(e.target.value)}
-            />
+            <input type="text" id="country" {...register('country')} />
+            {errors.country && (
+              <p className="error-message">{errors.country.message}</p>
+            )}
           </div>
           <div className="form-group">
             <label htmlFor="city">City</label>
-            <input
-              type="text"
-              id="city"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-            />
+            <input type="text" id="city" {...register('city')} />
+            {errors.city && (
+              <p className="error-message">{errors.city.message}</p>
+            )}
           </div>
           <div className="form-group">
             <label htmlFor="county">County</label>
-            <input
-              type="text"
-              id="county"
-              value={county}
-              onChange={(e) => setCounty(e.target.value)}
-            />
+            <input type="text" id="county" {...register('county')} />
+            {errors.county && (
+              <p className="error-message">{errors.county.message}</p>
+            )}
           </div>
           <div className="form-group">
             <label htmlFor="streetAddress">Street Address</label>
             <input
               type="text"
               id="streetAddress"
-              value={streetAddress}
-              onChange={(e) => setStreetAddress(e.target.value)}
+              {...register('streetAddress')}
             />
+            {errors.streetAddress && (
+              <p className="error-message">{errors.streetAddress.message}</p>
+            )}
           </div>
           <button
-            type="button"
+            type="submit"
             className="btn-place-order"
-            onClick={handlePlaceOrder}
-            disabled={!customer && isPlaceOrderLoading}
+            disabled={!customer || isPlaceOrderLoading}
           >
             {isPlaceOrderLoading ? 'Placing Order...' : 'Place Order'}
           </button>

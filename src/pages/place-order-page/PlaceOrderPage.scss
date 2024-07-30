@@ -50,10 +50,11 @@
       cursor: not-allowed;
     }
   
-    .error {
-      color: red;
-      text-align: center;
-      margin-top: 1em;
+    .error-message {
+      color: darkred;
+      font-size: 0.875em;
+      margin-top: 4px;
     }
+    
   }
   
