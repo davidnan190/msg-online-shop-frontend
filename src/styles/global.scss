@@ -1,0 +1,22 @@
+@import './variables';
+
+:root {
+  --primary-color: #{$primary-color};
+  --secondary-color: #{$secondary-color};
+  --text-color: #{$text-color};
+  --background-color: #{$background-color};
+  --border-color: #{$border-color};
+  --font-family: #{$font-family};
+  --padding: #{$padding};
+  --margin: #{$margin};
+  --border-radius: #{$border-radius};
+  --box-shadow: #{$box-shadow};
+  --btn-primary-color: #{$btn-primary-color};
+  --btn-primary-bg: #{$btn-primary-bg};
+  --btn-secondary-color: #{$btn-secondary-color};
+  --btn-secondary-bg: #{$btn-secondary-bg};
+}
+
+body {
+  font-family: var(--font-family);
+}

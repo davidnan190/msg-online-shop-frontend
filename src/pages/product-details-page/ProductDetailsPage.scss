@@ -1,0 +1,31 @@
+.product-details-page {
+  display: flex;
+  flex: 2;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--padding);
+
+  .page-headline {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+  }
+}
+
+.product-details-card {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  background-color: var(--background-color);
+  box-shadow: var(--box-shadow);
+  width: 100%;
+  max-width: 1000px;
+  overflow: hidden;
+}
+
+.product-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}

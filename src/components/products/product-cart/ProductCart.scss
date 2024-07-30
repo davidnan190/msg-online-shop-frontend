@@ -1,0 +1,112 @@
+@import '../../../styles/variables';
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: var(--padding);
+  background-color: var(--background-color);
+  box-shadow: var(--box-shadow);
+  position: relative;
+  transition: transform 0.3s, box-shadow 0.3s;
+  max-width: 400px;
+
+  &:hover {
+    transform: scale(1.01);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+    .product-actions {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
+    }
+  }
+
+  .product-image {
+    width: 100%;
+    border-radius: var(--border-radius);
+    object-fit: cover;
+  }
+
+  .product-info {
+    flex: 1;
+    padding: var(--padding);
+
+    .product-name {
+      font-size: 1.1em;
+      margin: 0 0 8px;
+      color: var(--text-color);
+    }
+
+    .product-category {
+      display: inline-block;
+      background-color: var(--secondary-color);
+      color: var(--background-color);
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.875em;
+      margin-bottom: 8px;
+    }
+
+    .product-price {
+      color: var(--primary-color);
+      font-size: 1em;
+      margin: 0 0 8px;
+    }
+
+    .product-weight,
+    .product-supplier {
+      font-size: 0.875em;
+      margin: 0 0 8px;
+      color: var(--text-color);
+    }
+
+    .product-description {
+      color: #555;
+      font-size: 0.875em;
+      margin-bottom: 16px;
+    }
+  }
+
+  .product-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .location-label,
+    .quantity-label {
+      font-size: 0.875em;
+      color: var(--text-color);
+    }
+
+    .location-input,
+    .quantity-input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+    }
+
+    .btn-cart {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      background-color: var(--primary-color);
+      color: var(--background-color);
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: darken(var(--primary-color), 10%);
+      }
+
+      .icon {
+        font-size: 1.2em;
+      }
+    }
+  }
+}

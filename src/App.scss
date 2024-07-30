@@ -1,0 +1,15 @@
+@use './styles/global';
+@import './styles/variables.scss';
+
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--padding);
+  font-family: var(--font-family);
+}
+
+.page-headline {
+  color: var(--primary-color);
+  text-align: center;
+  color: var(--text-color);
+}

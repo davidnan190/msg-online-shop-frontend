@@ -1,0 +1,61 @@
+@import '../../../styles/variables.scss';
+
+.product-details-actions {
+  display: flex;
+  flex-direction: column;
+  margin-top: 16px;
+
+  .action-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+
+    label {
+      margin-bottom: 8px;
+      color: var(--primary-color);
+    }
+
+    input {
+      padding: 8px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+    }
+  }
+
+  .btn-cart {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    background-color: $primary-color;
+    color: var(--background-color);
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+    margin-bottom: 8px;
+
+    &:hover {
+      background-color: lighten($primary-color, 5%);
+    }
+  }
+
+  .btn-delete {
+    background-color: var(--secondary-color);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    color: var(--background-color);
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: darken($secondary-color, 5%);
+    }
+  }
+}
