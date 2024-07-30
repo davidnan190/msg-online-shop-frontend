@@ -3,6 +3,7 @@ import './AddToCartDropdown.scss';
 import React, { useState } from 'react';
 
 import { ILocation } from '../../../types/locations/location.interface';
+import { z } from 'zod';
 
 type AddToCartDropdownProps = {
   availableLocations: ILocation[] | undefined;
@@ -11,7 +12,7 @@ type AddToCartDropdownProps = {
 
 const schema = z.object({
   quantity: z.number().min(1, 'Quantity must be at least 1'),
-  locationId: z.string().nonempty('Location is required'),
+  locationId: z.string().min(1, 'Location is required'),
 });
 
 type FormData = z.infer<typeof schema>;

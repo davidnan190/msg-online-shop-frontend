@@ -1,60 +1,59 @@
 .place-order-page {
-    padding: var(--padding);
-    background-color: var(--background-color);
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-  }
-  
-  .page-headline {
-    font-size: 2em;
+  padding: var(--padding);
+  background-color: var(--background-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+.page-headline {
+  font-size: 2em;
+  margin-bottom: var(--padding);
+  color: var(--primary-color);
+}
+
+.order-form {
+  margin-top: var(--padding);
+  display: flex;
+  flex-direction: column;
+
+  .form-group {
     margin-bottom: var(--padding);
-    color: var(--primary-color);
-  }
-  
-  .order-form {
-    margin-top: var(--padding);
-    display: flex;
-    flex-direction: column;
-  
-    .form-group {
-      margin-bottom: var(--padding);
-  
-      label {
-        font-size: 1em;
-        margin-bottom: 0.5em;
-        color: var(--text-color);
-      }
-  
-      input {
-        padding: 0.5em;
-        font-size: 1em;
-        border: 1px solid var(--border-color);
-        border-radius: var(--border-radius);
-        width: 98%;
-      }
-    }
-  
-    .btn-place-order {
-      padding: 1em;
-      background-color: var(--primary-color);
-      color: #fff;
-      border: none;
-      border-radius: var(--border-radius);
+
+    label {
       font-size: 1em;
-      cursor: pointer;
-      text-align: center;
+      margin-bottom: 0.5em;
+      color: var(--text-color);
     }
-  
-    .btn-place-order:disabled {
-      background-color: var(--disabled-color);
-      cursor: not-allowed;
+
+    input {
+      padding: 0.5em;
+      font-size: 1em;
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      width: 98%;
     }
-  
-    .error-message {
-      color: darkred;
-      font-size: 0.875em;
-      margin-top: 4px;
-    }
-    
+  }
+
+  .btn-place-order {
+    padding: 1em;
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 1em;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .btn-place-order:disabled {
+    background-color: var(--disabled-color);
+    cursor: not-allowed;
+  }
+
+  .error-message {
+    color: darkred;
+    font-size: 0.875em;
+    margin-top: 4px;
   }
   
+}
