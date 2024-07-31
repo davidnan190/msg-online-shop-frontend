@@ -9,9 +9,9 @@ type FetchResult = {
   product: IProduct | undefined;
   isLoading: boolean;
   error: string | null;
-}
+};
 
-const useFetchProduct = (productId: string): FetchResult => {
+export const useFetchProduct = (productId: string): FetchResult => {
   const [product, setProduct] = useState<IProduct | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -47,5 +47,3 @@ const useFetchProduct = (productId: string): FetchResult => {
 
   return { product, isLoading, error };
 };
-
-export default useFetchProduct;

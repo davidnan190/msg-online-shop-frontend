@@ -128,7 +128,7 @@ export const PlaceOrderPage: React.FC = () => {
             {isPlaceOrderLoading ? 'Placing Order...' : 'Place Order'}
           </button>
         </form>
-        {placeOrderError && <p className="error">{placeOrderError}</p>}
+        {placeOrderError && <p className="error-message">{placeOrderError}</p>}
       </div>
     </>
   );

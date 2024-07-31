@@ -25,11 +25,18 @@ export const NavBarLinks: React.FC<NavBarLinksProps> = ({ customer }) => {
       </li>
 
       {customer?.role === Role.ADMIN && (
-        <li className="nav-item">
-          <NavLink to="/stock" end className="nav-link">
-            <strong>Stock</strong>
-          </NavLink>
-        </li>
+        <>
+          <li className="nav-item">
+            <NavLink to="/products/create" end className="nav-link">
+              <strong>Add Product</strong>
+            </NavLink>
+          </li>
+          <li className="nav-item">
+            <NavLink to="/stock" end className="nav-link">
+              <strong>Stock</strong>
+            </NavLink>
+          </li>
+        </>
       )}
     </ul>
   );

@@ -8,7 +8,7 @@ type DeleteResult = {
   deleteProduct: (productId: string) => Promise<void>;
 };
 
-const useDeleteProduct = (): DeleteResult => {
+export const useDeleteProduct = (): DeleteResult => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -31,5 +31,3 @@ const useDeleteProduct = (): DeleteResult => {
 
   return { isLoading, error, deleteProduct };
 };
-
-export default useDeleteProduct;

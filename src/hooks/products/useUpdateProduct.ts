@@ -1,4 +1,4 @@
-import { IProduct } from '../../interfaces/product.interface';
+import { IProduct } from '../../types/products/product.interface';
 import { UpdateProductRequest } from '../../types/products/update-product-request.type';
 import axios from 'axios';
 import { productService } from '../../services/product.service';
@@ -12,7 +12,7 @@ type UpdateResult = {
   ) => Promise<IProduct | undefined>;
 };
 
-const useUpdateProduct = (): UpdateResult => {
+export const useUpdateProduct = (): UpdateResult => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -41,5 +41,3 @@ const useUpdateProduct = (): UpdateResult => {
 
   return { isLoading, error, updateProduct };
 };
-
-export default useUpdateProduct;

@@ -7,6 +7,7 @@ import {
 
 import App from './App';
 import { CartPage } from './pages/cart-page/CartPage';
+import { CreateProductPage } from './pages/create-product-page/CreateProductPage';
 import { NavBar } from './components/navigation/navbar/NavBar';
 import { PlaceOrderPage } from './pages/place-order-page/PlaceOrderPage';
 import { ProductDetailsPage } from './pages/product-details-page/ProductDetailsPage';
@@ -24,6 +25,7 @@ const router = createBrowserRouter(
       <Route element={<NavBar />}>
         <Route path="products" element={<ProductsPage />} />
         <Route path="products/:productId" element={<ProductDetailsPage />} />
+        <Route path="products/create" element={<CreateProductPage />} />
         <Route path="cart" element={<CartPage />} />
         <Route path="place-order" element={<PlaceOrderPage />} />
         <Route path="*" element={<Navigate to="/products" />} />

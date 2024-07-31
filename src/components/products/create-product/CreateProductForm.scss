@@ -1,0 +1,133 @@
+@import '../../../styles/variables.scss';
+
+.create-product-form {
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+
+    label {
+      margin-bottom: 8px;
+      color: var(--primary-color);
+    }
+
+    input,
+    textarea,
+    select {
+      padding: 6px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+    }
+
+    .error-message {
+      color: darkred;
+      font-size: 0.875em;
+      margin-top: 4px;
+    }
+  }
+
+  .form-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+
+    .form-group {
+      flex: 1;
+    }
+  }
+
+  .stock-data-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+
+    input {
+      flex: 1;
+      max-width: 200px;
+    }
+
+    button {
+      padding: 6px 12px;
+      background-color: var(--secondary-color);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: darken($secondary-color, 5%);
+      }
+
+      &.remove {
+        background-color: var(--secondary-color);
+
+        &:hover {
+          background-color: darken($secondary-color, 5%);
+        }
+      }
+    }
+  }
+
+  .add-stock-data-button {
+    padding: 8px 16px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 8px;
+
+    &:hover {
+      background-color: darken($primary-color, 5%);
+    }
+  }
+
+  .btn-group {
+    display: flex;
+    margin-top: 16px;
+
+    .btn-save {
+      padding: 8px 16px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:disabled {
+        background-color: darken($secondary-color, 5%);
+      }
+
+      &:hover:not(:disabled) {
+        background-color: darken($primary-color, 5%);
+      }
+    }
+
+    .btn-cancel {
+      padding: 8px 16px;
+      background-color: var(--secondary-color);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+
+      &:disabled {
+        background-color: darken($secondary-color, 5%);
+      }
+
+      &:hover:not(:disabled) {
+        background-color: darken($secondary-color, 5%);
+      }
+    }
+  }
+
+  .error-message {
+    color: darkred;
+    margin-top: 16px;
+  }
+}
