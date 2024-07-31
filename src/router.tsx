@@ -8,16 +8,18 @@ import {
 import App from './App';
 import { CartPage } from './pages/cart-page/CartPage';
 import { CreateProductPage } from './pages/create-product-page/CreateProductPage';
+import { LoginPage } from './pages/login-page/LoginPage';
 import { NavBar } from './components/navigation/navbar/NavBar';
 import { PlaceOrderPage } from './pages/place-order-page/PlaceOrderPage';
 import { ProductDetailsPage } from './pages/product-details-page/ProductDetailsPage';
 import { ProductsPage } from './pages/products-page/ProductsPage';
+import { RegistrationPage } from './pages/registration-page/RegistrationPage';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
-      <Route path="login" element={<span>Login Page</span>} />
-      <Route path="register" element={<span>Login Page</span>} />
+      <Route path="login" element={<LoginPage />} />
+      <Route path="register" element={<RegistrationPage />} />
 
       <Route path="/" element={<Navigate to="/products" />} />
       <Route path="*" element={<Navigate to="/" />} />
