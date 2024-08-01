@@ -7,10 +7,12 @@ import { NavLink } from 'react-router-dom';
 
 type CustomerProfileDropdownProps = {
   customer: ICustomer | undefined;
+  onLogout: () => void;
 };
 
 const CustomerProfileDropdown: React.FC<CustomerProfileDropdownProps> = ({
   customer,
+  onLogout,
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -42,24 +44,8 @@ const CustomerProfileDropdown: React.FC<CustomerProfileDropdownProps> = ({
           </li>
           <hr className="dropdown-divider" />
           <li>
-            <NavLink to="/customer/password" end className="dropdown-item">
-              <i className="bi bi-key"></i> Password
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/customer/settings" end className="dropdown-item">
-              <i className="bi bi-gear-wide-connected"></i> Settings
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/customer/authorization" end className="dropdown-item">
-              <i className="bi bi-shield-exclamation"></i> Authorization
-            </NavLink>
-          </li>
-          <hr className="dropdown-divider" />
-          <li>
-            <a className="dropdown-item dropdown-item-danger">
-              <i className="bi bi-box-arrow-right"></i> Logout
+            <a className="dropdown-item logout" onClick={() => onLogout()}>
+              Logout
             </a>
           </li>
         </ul>

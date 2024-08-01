@@ -70,11 +70,12 @@
       border-top: 1px solid #ddd;
     }
 
-    .dropdown-item-danger {
+    .logout {
       color: var(--primary-color);
 
       &:hover {
-        background-color: #f8d7da;
+        background-color: var(--primary-color);
+        color: white
       }
     }
   }
