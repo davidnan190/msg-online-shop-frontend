@@ -50,7 +50,6 @@ export const CreateProductForm: React.FC<Props> = ({
 
   const { createProduct, isLoading, error } = useCreateProduct();
 
-  const navigate = useNavigate();
 
   const {
     register,

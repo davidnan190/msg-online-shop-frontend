@@ -1,4 +1,5 @@
-import { BACKEND_BASE_URL } from '../constants/api.constants';
+import { BACKEND_BASE_URL, LOGIN_URL_PREFIX, REGISTRATION_URL_PREFIX } from '../constants/api.constants';
+
 import { HttpMethod } from '../enums/http-method.enum';
 import { LoginRequest } from '../types/auth/login-request.type';
 import { LoginResponse } from '../types/auth/login-response.type';
@@ -19,7 +20,7 @@ class AuthService {
     const headers = {
       'Content-Type': 'application/json',
     };
-    const url = `${this.AUTH_BASE_URL}/register`;
+    const url = `${this.AUTH_BASE_URL}${REGISTRATION_URL_PREFIX}`;
     return await fetchWithCancellation<RegistrationResponse>(
       url,
       {
@@ -38,7 +39,7 @@ class AuthService {
     const headers = {
       'Content-Type': 'application/json',
     };
-    const url = `${this.AUTH_BASE_URL}/login`;
+    const url = `${this.AUTH_BASE_URL}${LOGIN_URL_PREFIX}`;
     return await fetchWithCancellation<LoginResponse>(
       url,
       {

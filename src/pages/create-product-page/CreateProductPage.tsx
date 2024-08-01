@@ -1,4 +1,5 @@
 import { CreateProductForm } from '../../components/products/create-product/CreateProductForm';
+import { PRODUCTS_URL_PREFIX } from '../../constants/api.constants';
 import React from 'react';
 import { useFetchLocations } from '../../hooks/locations/useFetchLocations';
 import { useFetchProductCategories } from '../../hooks/categories/useFetchProductCategories';
@@ -12,7 +13,7 @@ export const CreateProductPage: React.FC = () => {
     useFetchLocations();
 
   const handleSuccess = () => {
-    navigate('/products');
+    navigate(PRODUCTS_URL_PREFIX);
   };
 
   if (categoriesLoading) {

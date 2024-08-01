@@ -4,8 +4,10 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 
 import CustomerProfileDropdown from '../dropdown/CustomerProfileDropdown';
 import { ICustomer } from '../../../types/customers/customer.interface';
+import { LOGIN_URL_PREFIX } from '../../../constants/api.constants';
 import { NavBarLinks } from '../navbar-links/NavBarLinks';
 import appLogo from '../../../assets/msg-logo.png';
+import { clearAxiosAccessToken } from '../../../utils/request.utils';
 import { useAuthContext } from '../../../context/AuthContext';
 
 export const NavBar: React.FC = () => {
@@ -15,7 +17,8 @@ export const NavBar: React.FC = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    clearAxiosAccessToken();
+    navigate(LOGIN_URL_PREFIX);
   };
 
   return (
@@ -26,7 +29,7 @@ export const NavBar: React.FC = () => {
             <img src={appLogo} alt="Logo" className="logo" />
           </NavLink>
           <div className="navbar-collapse">
-            <NavBarLinks customer={loggedInUser} />
+            <NavBarLinks />
             <CustomerProfileDropdown
               customer={loggedInUser}
               onLogout={handleLogout}

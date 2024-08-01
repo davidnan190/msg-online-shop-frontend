@@ -1,5 +1,9 @@
 import './ProductDetailsPage.scss';
 
+import {
+  CART_URL_PREFIX,
+  PRODUCTS_URL_PREFIX,
+} from '../../constants/api.constants';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import EditProductForm from '../../components/products/edit-product-details/EditProductDetailsForm';
@@ -56,13 +60,13 @@ export const ProductDetailsPage: React.FC = () => {
   const handleDeleteProduct = async () => {
     if (productId) {
       await deleteProduct(productId);
-      navigate('/products');
+      navigate(PRODUCTS_URL_PREFIX);
     }
   };
 
   const handleAddToCart = (quantity: number, location: ILocation) => {
     addToCart(product, quantity, location);
-    navigate('/cart');
+    navigate(CART_URL_PREFIX);
   };
 
   return (

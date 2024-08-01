@@ -1,6 +1,7 @@
 import './LoginForm.scss';
 
 import { LoginRequest } from '../../../types/auth/login-request.type';
+import { PRODUCTS_URL_PREFIX } from '../../../constants/api.constants';
 import React from 'react';
 import { setAxiosAccessToken } from '../../../utils/request.utils';
 import { useAuthContext } from '../../../context/AuthContext';
@@ -40,7 +41,7 @@ const LoginForm: React.FC = () => {
 
     if (accessToken) {
       setAxiosAccessToken(accessToken);
-      navigate('/products');
+      navigate(PRODUCTS_URL_PREFIX);
     }
   };
 

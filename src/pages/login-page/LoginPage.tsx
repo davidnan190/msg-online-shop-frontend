@@ -2,6 +2,7 @@ import './LoginPage.scss';
 
 import { ActionLinks } from '../../components/auth/action-links/ActionLinks';
 import LoginForm from '../../components/auth/login-form/LoginForm';
+import { REGISTRATION_URL_PREFIX } from '../../constants/api.constants';
 import React from 'react';
 
 export const LoginPage: React.FC = () => {
@@ -14,7 +15,7 @@ export const LoginPage: React.FC = () => {
           <LoginForm />
           <ActionLinks
             firstLinkText={'Create an account'}
-            firstLinkPath={'/register'}
+            firstLinkPath={REGISTRATION_URL_PREFIX}
           />
         </div>
       </div>

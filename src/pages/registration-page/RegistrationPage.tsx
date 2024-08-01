@@ -1,6 +1,7 @@
-import './RegistrationPage.scss'
+import './RegistrationPage.scss';
 
 import { ActionLinks } from '../../components/auth/action-links/ActionLinks';
+import { LOGIN_URL_PREFIX } from '../../constants/api.constants';
 import RegistrationForm from '../../components/auth/registration-form/RegistrationForm';
 import { RegistrationRequest } from '../../types/auth/registration-request.type';
 import { useRegister } from '../../hooks/auth/useRegister';
@@ -19,10 +20,7 @@ export const RegistrationPage: React.FC = () => {
           {error && <div className="registration-alert">{error}</div>}
           <hr />
           <RegistrationForm onRegister={onRegister} isLoading={isLoading} />
-          <ActionLinks
-            firstLinkText={'Go to login'}
-            firstLinkPath={'/login'}
-          />
+          <ActionLinks firstLinkText={'Go to login'} firstLinkPath={LOGIN_URL_PREFIX} />
         </div>
       </div>
     </div>

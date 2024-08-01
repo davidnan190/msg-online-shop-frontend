@@ -2,6 +2,7 @@ import './EditProductDetailsForm.scss';
 
 import { IProduct } from '../../../types/products/product.interface';
 import { IProductCategory } from '../../../types/products/product-category.interface';
+import { PRODUCTS_URL_PREFIX } from '../../../constants/api.constants';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -63,7 +64,7 @@ export const EditProductForm: React.FC<Props> = ({
     toggleIsEditing();
 
     if (updatedProduct) {
-      navigate(`/products/${data.id}`);
+      navigate(`${PRODUCTS_URL_PREFIX}/${data.id}`);
     }
   };
 

@@ -3,6 +3,7 @@ import './CartPage.scss';
 import { CartActions } from '../../components/cart/cart-actions/CartActions';
 import { CartItem } from '../../components/cart/cart-item/CartItem';
 import { CartTotal } from '../../components/cart/cart-total/CartTotal';
+import { PLACE_ORDER_URL_PREFIX } from '../../constants/api.constants';
 import { useCart } from '../../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -29,7 +30,7 @@ export const CartPage: React.FC = () => {
         <button
           className="checkout-button"
           disabled={cart.length === 0}
-          onClick={() => navigate('/place-order')}
+          onClick={() => navigate(PLACE_ORDER_URL_PREFIX)}
         >
           Proceed to Checkout
         </button>
