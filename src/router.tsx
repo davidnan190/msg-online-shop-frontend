@@ -21,17 +21,18 @@ const router = createBrowserRouter(
       <Route path="login" element={<LoginPage />} />
       <Route path="register" element={<RegistrationPage />} />
 
-      <Route path="/" element={<Navigate to="/products" />} />
-      <Route path="*" element={<Navigate to="/" />} />
+     
+        <Route path="/" element={<Navigate to="/products" />} />
+        <Route path="*" element={<Navigate to="/" />} />
 
-      <Route element={<NavBar />}>
-        <Route path="products" element={<ProductsPage />} />
-        <Route path="products/:productId" element={<ProductDetailsPage />} />
-        <Route path="products/create" element={<CreateProductPage />} />
-        <Route path="cart" element={<CartPage />} />
-        <Route path="place-order" element={<PlaceOrderPage />} />
-        <Route path="*" element={<Navigate to="/products" />} />
-      </Route>
+        <Route element={<NavBar />}>
+          <Route path="products" element={<ProductsPage />} />
+          <Route path="products/:productId" element={<ProductDetailsPage />} />
+          <Route path="products/create" element={<CreateProductPage />} />
+          <Route path="cart" element={<CartPage />} />
+          <Route path="place-order" element={<PlaceOrderPage />} />
+          <Route path="*" element={<Navigate to="/products" />} />
+        </Route>
     </Route>
   )
 );

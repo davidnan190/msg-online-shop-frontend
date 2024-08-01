@@ -1,9 +1,8 @@
-import axios, { CancelTokenSource } from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 
-import { ERROR_REQUEST_CANCELLED_BY_CLIENT } from '../../constants/api.constants';
 import { IProductCategory } from '../../types/products/product-category.interface';
 import { productCategoryService } from '../../services/product-category.service';
+import { useAuthContext } from '../../context/AuthContext';
 import { useLogger } from '../../context/LoggerContext';
 
 type FetchResult = {
@@ -20,36 +19,44 @@ export const useFetchProductCategories = (): FetchResult => {
   const [error, setError] = useState<string | null>(null);
 
   const logger = useLogger();
+  const { accessToken } = useAuthContext();
 
-  const fetchProductCategories = useCallback(
-    async (cancelToken: CancelTokenSource) => {
+  const fetchCategories = useCallback(
+    async (signal: AbortSignal) => {
       setIsLoading(true);
       setError(null);
 
       try {
-        const data = await productCategoryService.getAllCategories(cancelToken);
+        if (!accessToken) {
+          throw new Error('No access token available');
+        }
+        const data = await productCategoryService.getAllCategories(
+          signal,
+          accessToken
+        );
         setCategories(data);
         logger.debug(`Fetch Categories Data: ${data}`, {
-          hook: 'useFetchProductCategories',
-          action: 'fetchProductCategories',
+          hook: 'useFetchCategories',
+          action: 'fetchCategories',
         });
       } catch (err) {
-        if (!axios.isCancel(err)) setError((err as Error).message);
+        setError((err as Error).message);
       } finally {
         setIsLoading(false);
       }
     },
-    []
+    [accessToken, logger]
   );
 
   useEffect(() => {
-    const cancelTokenSource = axios.CancelToken.source();
-    fetchProductCategories(cancelTokenSource);
+    const abortController = new AbortController();
+
+    fetchCategories(abortController.signal);
 
     return () => {
-      cancelTokenSource.cancel(ERROR_REQUEST_CANCELLED_BY_CLIENT);
+      abortController.abort();
     };
-  }, [fetchProductCategories]);
+  }, [fetchCategories]);
 
   return { categories, isLoading, error };
 };

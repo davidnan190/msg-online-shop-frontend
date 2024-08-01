@@ -1,9 +1,13 @@
 import './LoginForm.scss';
 
+import { LocalStorageKey } from '../../../enums/local-storage-key.enum';
 import { LoginRequest } from '../../../types/auth/login-request.type';
 import { LoginResponse } from '../../../types/auth/login-response.type';
 import React from 'react';
+import { access } from 'fs';
+import { useAuthContext } from '../../../context/AuthContext';
 import { useForm } from 'react-hook-form';
+import { useLogin } from '../../../hooks/auth/useLogin';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -15,21 +19,27 @@ const loginSchema = z.object({
   password: z.string().min(3, 'Password is required'),
 });
 
-type Props = {
-  login: (credentials: LoginRequest) => Promise<LoginResponse | undefined>;
-  isLoading: boolean;
-};
+const LoginForm: React.FC = () => {
+  const { register, handleSubmit, formState } = useForm<LoginRequest>({
+    resolver: zodResolver(loginSchema),
+    mode: 'onTouched',
+  });
 
-const LoginForm: React.FC<Props> = ({ login, isLoading }) => {
-  const { register, handleSubmit, formState } =
-    useForm<LoginRequest>({
-      resolver: zodResolver(loginSchema),
-      mode: 'onTouched',
-    });
+  const { login: authLogin, accessToken } = useAuthContext();
+  const { login, isLoading, error } = useLogin();
 
   const handleLogin = async (credentials: LoginRequest) => {
-    const result = await login(credentials);
-    console.log(result);
+    const response = await login(credentials);
+    console.log(response);
+    if (response) {
+      authLogin(
+        response.tokens.accessToken,
+        response.tokens.refreshToken,
+        response.customer.role
+      );
+    }
+
+    console.log(accessToken);
   };
 
   return (

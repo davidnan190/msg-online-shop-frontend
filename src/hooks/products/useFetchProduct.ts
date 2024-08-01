@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { ERROR_REQUEST_CANCELLED_BY_CLIENT } from '../../constants/api.constants';
 import { IProduct } from '../../types/products/product.interface';
 import { productService } from '../../services/product.service';
+import { useAuthContext } from '../../context/AuthContext';
 
 type FetchResult = {
   product: IProduct | undefined;
@@ -16,21 +17,27 @@ export const useFetchProduct = (productId: string): FetchResult => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const cancelTokenSource = axios.CancelToken.source();
+  const { accessToken } = useAuthContext();
 
-    const fetchProductById = async (
-      id: string,
-      cancelToken: CancelTokenSource
-    ) => {
+  useEffect(() => {
+    const abortController = new AbortController();
+
+    const fetchProductById = async (id: string, signal: AbortSignal) => {
       setIsLoading(true);
       setError(null);
 
       try {
-        const data = await productService.getProductById(id, cancelToken);
+        if (!accessToken) {
+          throw new Error('No access token available');
+        }
+        const data = await productService.getProductById(
+          id,
+          signal,
+          accessToken
+        );
         setProduct(data);
       } catch (err) {
-        if (!axios.isCancel(err)) {
+        if ((err as Error).name !== 'AbortError') {
           setError((err as Error).message);
         }
       } finally {
@@ -38,12 +45,12 @@ export const useFetchProduct = (productId: string): FetchResult => {
       }
     };
 
-    fetchProductById(productId, cancelTokenSource);
+    fetchProductById(productId, abortController.signal);
 
     return () => {
-      cancelTokenSource.cancel(ERROR_REQUEST_CANCELLED_BY_CLIENT);
+      abortController.abort();
     };
-  }, [productId]);
+  }, [productId, accessToken]);
 
   return { product, isLoading, error };
 };

@@ -1,4 +1,7 @@
-import { ICustomer } from "../customers/customer.interface";
-import { ITokens } from "./tokens.interface";
+import { ICustomer } from '../customers/customer.interface';
+import { ITokens } from './tokens.interface';
 
-export type LoginResponse = ICustomer & ITokens
+export interface LoginResponse {
+  customer: ICustomer;
+  tokens: ITokens;
+}

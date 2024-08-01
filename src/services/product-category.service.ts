@@ -1,21 +1,30 @@
-import { BaseService } from './base.service';
-import { CancelTokenSource } from 'axios';
+import { createHeaders, fetchWithCancellation } from '../utils/request.utils';
+
+import { BACKEND_BASE_URL } from '../constants/api.constants';
 import { HttpMethod } from '../enums/http-method.enum';
 import { IProductCategory } from '../types/products/product-category.interface';
 
-class ProductCategoryService extends BaseService {
-  private readonly CATEGORY_FEATURE_URL_PREFIX = '/categories';
+class ProductCategoryService {
+  private readonly CATEGORY_BASE_URL: string;
 
-  public getAllCategories(
-    cancelToken: CancelTokenSource
+  constructor(baseUrl: string) {
+    this.CATEGORY_BASE_URL = `${baseUrl}/categories`;
+  }
+
+  public async getAllCategories(
+    signal: AbortSignal,
+    accessToken?: string
   ): Promise<IProductCategory[] | undefined> {
-    return this.request<IProductCategory[]>(
-      HttpMethod.GET,
-      this.CATEGORY_FEATURE_URL_PREFIX,
-      undefined,
-      cancelToken
+    const headers = createHeaders(accessToken);
+    const url = this.CATEGORY_BASE_URL;
+    return await fetchWithCancellation<IProductCategory[]>(
+      url,
+      { method: HttpMethod.GET, headers },
+      signal
     );
   }
 }
 
-export const productCategoryService = new ProductCategoryService();
+export const productCategoryService = new ProductCategoryService(
+  BACKEND_BASE_URL
+);

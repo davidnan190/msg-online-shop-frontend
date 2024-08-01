@@ -1,71 +1,100 @@
-import { BaseService } from './base.service';
-import { CancelTokenSource } from 'axios';
+import { createHeaders, fetchWithCancellation } from '../utils/request.utils';
+
+import { BACKEND_BASE_URL } from '../constants/api.constants';
 import { CreateProductRequest } from '../types/products/create-product-request.type';
 import { HttpMethod } from '../enums/http-method.enum';
 import { IProduct } from '../types/products/product.interface';
 import { UpdateProductRequest } from '../types/products/update-product-request.type';
 
-class ProductService extends BaseService {
-  private readonly PRODUCTS_FEATURE_URL_PREFIX = '/products';
+class ProductService {
+  private readonly PRODUCTS_BASE_URL: string;
 
-  public getAllProducts(
-    cancelToken: CancelTokenSource
+  constructor(baseUrl: string) {
+    this.PRODUCTS_BASE_URL = `${baseUrl}/products`;
+  }
+
+  public async getAllProducts(
+    signal: AbortSignal,
+    accessToken?: string
   ): Promise<IProduct[] | undefined> {
-    return this.request<IProduct[]>(
-      HttpMethod.GET,
-      this.PRODUCTS_FEATURE_URL_PREFIX,
-      undefined,
-      cancelToken
+    const headers = createHeaders(accessToken);
+    const url = this.PRODUCTS_BASE_URL;
+    return await fetchWithCancellation<IProduct[]>(
+      url,
+      { method: HttpMethod.GET, headers },
+      signal
     );
   }
 
-  public getProductById(
+  public async getProductById(
     productId: string,
-    cancelToken: CancelTokenSource
+    signal: AbortSignal,
+    accessToken?: string
   ): Promise<IProduct | undefined> {
-    return this.request<IProduct>(
-      HttpMethod.GET,
-      `${this.PRODUCTS_FEATURE_URL_PREFIX}/${productId}`,
-      undefined,
-      cancelToken
+    const headers = createHeaders(accessToken);
+    const url = `${this.PRODUCTS_BASE_URL}/${productId}`;
+    return await fetchWithCancellation<IProduct>(
+      url,
+      { method: HttpMethod.GET, headers },
+      signal
     );
   }
 
-  public createProduct(
-    newProductData: CreateProductRequest,
-    cancelToken: CancelTokenSource
-  ): Promise<IProduct | undefined> {
-    return this.request<IProduct>(
-      HttpMethod.POST,
-      `${this.PRODUCTS_FEATURE_URL_PREFIX}`,
-      newProductData,
-      cancelToken
-    );
-  }
-
-  public updateProductById(
+  public async updateProductById(
     updatedData: UpdateProductRequest,
-    cancelToken: CancelTokenSource
+    signal: AbortSignal,
+    accessToken?: string
   ): Promise<IProduct | undefined> {
-    return this.request<IProduct>(
-      HttpMethod.PATCH,
-      `${this.PRODUCTS_FEATURE_URL_PREFIX}/${updatedData.id}`,
-      updatedData,
-      cancelToken
+    const headers = {
+      ...createHeaders(accessToken),
+      'Content-Type': 'application/json',
+    };
+    const url = `${this.PRODUCTS_BASE_URL}/${updatedData.id}`;
+    return await fetchWithCancellation<IProduct>(
+      url,
+      {
+        method: HttpMethod.PATCH,
+        headers,
+        body: JSON.stringify(updatedData),
+      },
+      signal
     );
   }
 
-  public deleteProductById(
-    productId: string,
-    cancelToken: CancelTokenSource
+  public async createProduct(
+    newProductData: CreateProductRequest,
+    signal: AbortSignal,
+    accessToken?: string
   ): Promise<IProduct | undefined> {
-    return this.request<IProduct>(
-      HttpMethod.DELETE,
-      `${this.PRODUCTS_FEATURE_URL_PREFIX}/${productId}`,
-      undefined,
-      cancelToken
+    const headers = {
+      ...createHeaders(accessToken),
+      'Content-Type': 'application/json',
+    };
+    const url = this.PRODUCTS_BASE_URL;
+    return await fetchWithCancellation<IProduct>(
+      url,
+      {
+        method: HttpMethod.POST,
+        headers,
+        body: JSON.stringify(newProductData),
+      },
+      signal
+    );
+  }
+
+  public async deleteProductById(
+    productId: string,
+    signal: AbortSignal,
+    accessToken?: string
+  ): Promise<void> {
+    const headers = createHeaders(accessToken);
+    const url = `${this.PRODUCTS_BASE_URL}/${productId}`;
+    await fetchWithCancellation<void>(
+      url,
+      { method: HttpMethod.DELETE, headers },
+      signal
     );
   }
 }
 
-export const productService = new ProductService();
+export const productService = new ProductService(BACKEND_BASE_URL);
