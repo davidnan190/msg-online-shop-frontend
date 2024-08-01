@@ -1,3 +1,4 @@
+import { ABORT_ERROR } from '../../constants/api.constants';
 import { CreateProductRequest } from '../../types/products/create-product-request.type';
 import { IProduct } from '../../types/products/product.interface';
 import { productService } from '../../services/product.service';
@@ -27,7 +28,7 @@ export const useCreateProduct = (): CreateProductResult => {
 
     try {
       if (!accessToken) {
-        throw new Error('No access token available');
+        throw new Error('You dont have access this resource.');
       }
       const createdProduct = await productService.createProduct(
         newProductData,
@@ -36,7 +37,7 @@ export const useCreateProduct = (): CreateProductResult => {
       );
       return createdProduct;
     } catch (err) {
-      if ((err as Error).name !== 'AbortError') {
+      if ((err as Error).name !== ABORT_ERROR) {
         setError((err as Error).message);
       }
       return undefined;

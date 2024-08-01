@@ -1,7 +1,7 @@
+import { ABORT_ERROR, ERROR_REQUEST_CANCELLED_BY_CLIENT } from '../../constants/api.constants';
 import axios, { CancelTokenSource } from 'axios';
 import { useEffect, useState } from 'react';
 
-import { ERROR_REQUEST_CANCELLED_BY_CLIENT } from '../../constants/api.constants';
 import { IProduct } from '../../types/products/product.interface';
 import { productService } from '../../services/product.service';
 import { useAuthContext } from '../../context/AuthContext';
@@ -37,7 +37,7 @@ export const useFetchProduct = (productId: string): FetchResult => {
         );
         setProduct(data);
       } catch (err) {
-        if ((err as Error).name !== 'AbortError') {
+        if ((err as Error).name !== ABORT_ERROR) {
           setError((err as Error).message);
         }
       } finally {

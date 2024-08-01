@@ -72,29 +72,6 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     setUserRole(null);
   }, []);
 
-  // const refreshAccessToken = useCallback(async () => {
-  //   if (refreshToken) {
-  //     try {
-  //       const response = await fetch('/api/refresh-token', {
-  //         method: 'POST',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //         body: JSON.stringify({ refreshToken }),
-  //       });
-
-  //       if (!response.ok) {
-  //         throw new Error('Failed to refresh token');
-  //       }
-
-  //       const data = await response.json();
-  //       setAccessToken(data.accessToken);
-  //     } catch (error) {
-  //       console.error(error);
-  //       logout();
-  //     }
-  //   }
-  // }, [refreshToken, logout]);
 
   const value = useMemo(
     () => ({
@@ -103,7 +80,6 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       userRole,
       login,
       logout,
-      // refreshAccessToken,
     }),
     [accessToken, refreshToken, userRole, login, logout]
   );

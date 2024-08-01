@@ -1,13 +1,12 @@
 import './LoginForm.scss';
 
-import { LocalStorageKey } from '../../../enums/local-storage-key.enum';
 import { LoginRequest } from '../../../types/auth/login-request.type';
-import { LoginResponse } from '../../../types/auth/login-response.type';
 import React from 'react';
-import { access } from 'fs';
+import { setAxiosAccessToken } from '../../../utils/request.utils';
 import { useAuthContext } from '../../../context/AuthContext';
 import { useForm } from 'react-hook-form';
 import { useLogin } from '../../../hooks/auth/useLogin';
+import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -20,6 +19,7 @@ const loginSchema = z.object({
 });
 
 const LoginForm: React.FC = () => {
+  const navigate = useNavigate();
   const { register, handleSubmit, formState } = useForm<LoginRequest>({
     resolver: zodResolver(loginSchema),
     mode: 'onTouched',
@@ -30,7 +30,6 @@ const LoginForm: React.FC = () => {
 
   const handleLogin = async (credentials: LoginRequest) => {
     const response = await login(credentials);
-    console.log(response);
     if (response) {
       authLogin(
         response.tokens.accessToken,
@@ -39,7 +38,10 @@ const LoginForm: React.FC = () => {
       );
     }
 
-    console.log(accessToken);
+    if (accessToken) {
+      setAxiosAccessToken(accessToken);
+      navigate('/products');
+    }
   };
 
   return (

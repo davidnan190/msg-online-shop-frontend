@@ -1,7 +1,7 @@
+import { ABORT_ERROR } from '../../constants/api.constants';
 import { RegistrationRequest } from '../../types/auth/registration-request.type';
 import { RegistrationResponse } from '../../types/auth/registration-response.type';
 import { authService } from '../../services/auth.service';
-import axios from 'axios';
 import { useState } from 'react';
 
 type RegisterResult = {
@@ -19,18 +19,18 @@ export const useRegister = (): RegisterResult => {
   const register = async (
     registrationPayload: RegistrationRequest
   ): Promise<RegistrationResponse | undefined> => {
-    const cancelTokenSource = axios.CancelToken.source();
+    const abortController = new AbortController();
     setIsLoading(true);
     setError(null);
 
     try {
       const registrationResponse = await authService.register(
         registrationPayload,
-        cancelTokenSource
+        abortController.signal
       );
       return registrationResponse;
     } catch (err) {
-      if (!axios.isCancel(err)) {
+      if ((err as Error).name !== ABORT_ERROR) {
         setError((err as Error).message);
       }
       return undefined;

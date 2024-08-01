@@ -3,6 +3,9 @@ import {
   ERROR_REQUEST_CANCELLED_BY_CLIENT,
 } from '../constants/api.constants';
 
+import axiosInstance from '../api/axios-instance';
+import { useAuthContext } from '../context/AuthContext';
+
 export const handleApiError = (error: any): void => {
   console.error('API call failed:', error);
   throw error;
@@ -38,4 +41,14 @@ export const createHeaders = (accessToken?: string): Record<string, string> => {
     headers['Authorization'] = `Bearer ${accessToken}`;
   }
   return headers;
-}
+};
+
+export const setAxiosAccessToken = (accessToken: string) => {
+  axiosInstance.defaults.headers.common[
+    'Authorization'
+  ] = `Bearer ${accessToken}`;
+};
+
+export const clearAxiosAccessToken = () => {
+  axiosInstance.defaults.headers.common['Authorization'] = null;
+};

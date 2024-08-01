@@ -30,10 +30,6 @@ export const useFetchProducts = (): FetchResult => {
         }
         const data = await productService.getAllProducts(signal, accessToken);
         setProducts(data);
-        logger.debug(`Fetch Products Data: ${data}`, {
-          hook: 'useFetchProducts',
-          action: 'fetchProducts',
-        });
       } catch (err) {
         setError((err as Error).message);
       } finally {

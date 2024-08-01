@@ -1,7 +1,7 @@
+import { ABORT_ERROR } from '../../constants/api.constants';
 import { LoginRequest } from '../../types/auth/login-request.type';
 import { LoginResponse } from '../../types/auth/login-response.type';
 import { authService } from '../../services/auth.service';
-import axios from 'axios';
 import { useState } from 'react';
 
 type LoginResult = {
@@ -17,18 +17,18 @@ export const useLogin = (): LoginResult => {
   const login = async (
     loginPayload: LoginRequest
   ): Promise<LoginResponse | undefined> => {
-    const cancelTokenSource = axios.CancelToken.source();
+    const abortController = new AbortController();
     setIsLoading(true);
     setError(null);
 
     try {
       const loginResponse = await authService.login(
         loginPayload,
-        cancelTokenSource
+        abortController.signal
       );
       return loginResponse;
     } catch (err) {
-      if (!axios.isCancel(err)) {
+      if ((err as Error).name !== ABORT_ERROR) {
         setError((err as Error).message);
       }
       return undefined;

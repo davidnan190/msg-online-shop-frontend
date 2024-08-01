@@ -1,3 +1,4 @@
+import { ABORT_ERROR } from '../../constants/api.constants';
 import { productService } from '../../services/product.service';
 import { useAuthContext } from '../../context/AuthContext';
 import { useState } from 'react';
@@ -22,11 +23,15 @@ export const useDeleteProduct = (): DeleteResult => {
 
     try {
       if (!accessToken) {
-        throw new Error('No access token available');
+        throw new Error('You dont have access this resource.');
       }
-      await productService.deleteProductById(productId, abortController.signal, accessToken);
+      await productService.deleteProductById(
+        productId,
+        abortController.signal,
+        accessToken
+      );
     } catch (err) {
-      if ((err as Error).name !== 'AbortError') {
+      if ((err as Error).name !== ABORT_ERROR) {
         setError((err as Error).message);
       }
     } finally {

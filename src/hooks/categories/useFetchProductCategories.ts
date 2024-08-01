@@ -35,10 +35,6 @@ export const useFetchProductCategories = (): FetchResult => {
           accessToken
         );
         setCategories(data);
-        logger.debug(`Fetch Categories Data: ${data}`, {
-          hook: 'useFetchCategories',
-          action: 'fetchCategories',
-        });
       } catch (err) {
         setError((err as Error).message);
       } finally {

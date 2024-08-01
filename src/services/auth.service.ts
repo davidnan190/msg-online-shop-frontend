@@ -1,37 +1,54 @@
-import { BaseService } from './base.service';
-import { CancelTokenSource } from 'axios';
+import { BACKEND_BASE_URL } from '../constants/api.constants';
 import { HttpMethod } from '../enums/http-method.enum';
 import { LoginRequest } from '../types/auth/login-request.type';
 import { LoginResponse } from '../types/auth/login-response.type';
 import { RegistrationRequest } from '../types/auth/registration-request.type';
 import { RegistrationResponse } from '../types/auth/registration-response.type';
+import { fetchWithCancellation } from '../utils/request.utils';
 
-class AuthService extends BaseService {
-  private readonly AUTH_FEATURE_URL_PREFIX = '/auth';
+class AuthService {
+  private readonly AUTH_BASE_URL: string;
+  constructor(baseUrl: string) {
+    this.AUTH_BASE_URL = `${baseUrl}/auth`;
+  }
 
-  public register(
+  public async register(
     registrationPayload: RegistrationRequest,
-    cancelToken: CancelTokenSource
+    signal: AbortSignal
   ): Promise<RegistrationResponse | undefined> {
-    return this.request<RegistrationResponse>(
-      HttpMethod.POST,
-      `${this.AUTH_FEATURE_URL_PREFIX}/register`,
-      registrationPayload,
-      cancelToken
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+    const url = `${this.AUTH_BASE_URL}/register`;
+    return await fetchWithCancellation<RegistrationResponse>(
+      url,
+      {
+        method: HttpMethod.POST,
+        headers,
+        body: JSON.stringify(registrationPayload),
+      },
+      signal
     );
   }
 
-  public login(
+  public async login(
     loginPayload: LoginRequest,
-    cancelToken: CancelTokenSource
+    signal: AbortSignal
   ): Promise<LoginResponse | undefined> {
-    return this.request<LoginResponse>(
-      HttpMethod.POST,
-      `${this.AUTH_FEATURE_URL_PREFIX}/login`,
-      loginPayload,
-      cancelToken
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+    const url = `${this.AUTH_BASE_URL}/login`;
+    return await fetchWithCancellation<LoginResponse>(
+      url,
+      {
+        method: HttpMethod.POST,
+        headers,
+        body: JSON.stringify(loginPayload),
+      },
+      signal
     );
   }
 }
 
-export const authService = new AuthService();
+export const authService = new AuthService(BACKEND_BASE_URL);
