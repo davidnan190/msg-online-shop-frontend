@@ -26,7 +26,7 @@ const LoginForm: React.FC = () => {
   });
 
   const { login: authLogin, accessToken } = useAuthContext();
-  const { login, isLoading, error } = useLogin();
+  const { login, isLoading } = useLogin();
 
   const handleLogin = async (credentials: LoginRequest) => {
     const response = await login(credentials);
@@ -34,7 +34,7 @@ const LoginForm: React.FC = () => {
       authLogin(
         response.tokens.accessToken,
         response.tokens.refreshToken,
-        response.customer.role
+        response.customer
       );
     }
 

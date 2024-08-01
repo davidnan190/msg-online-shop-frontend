@@ -4,9 +4,8 @@ import { CartItem } from '../../components/cart/cart-item/CartItem';
 import { CartTotal } from '../../components/cart/cart-total/CartTotal';
 import { CreateOrderRequest } from '../../types/orders/create-order-request.type';
 import React from 'react';
-import { TEMP_HARDCODED_CUSTOMER_ID } from '../../constants/api.constants';
+import { useAuthContext } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
-import { useFetchCustomer } from '../../hooks/customers/useFetchCustomer';
 import { useForm } from 'react-hook-form';
 import { useLogger } from '../../context/LoggerContext';
 import { usePlaceOrder } from '../../hooks/orders/usePlaceOrder';
@@ -23,18 +22,20 @@ type FormData = z.infer<typeof schema>;
 
 export const PlaceOrderPage: React.FC = () => {
   const { cart, clearCart } = useCart();
-  const {
-    customer,
-    isLoading: isCustomerLoading,
-    error: customerError,
-  } = useFetchCustomer(TEMP_HARDCODED_CUSTOMER_ID);
+  const { retrieveLoggedInUser } = useAuthContext();
+  const loggedInUser = retrieveLoggedInUser();
+
+  if (!loggedInUser) {
+    return;
+  }
+
   const {
     isLoading: isPlaceOrderLoading,
     error: placeOrderError,
     placeOrder,
   } = usePlaceOrder();
 
-  const logger = useLogger()
+  const logger = useLogger();
 
   const {
     register,
@@ -45,7 +46,7 @@ export const PlaceOrderPage: React.FC = () => {
   });
 
   const onSubmit = async (data: FormData) => {
-    if (!customer) {
+    if (!loggedInUser) {
       return;
     }
 
@@ -54,7 +55,7 @@ export const PlaceOrderPage: React.FC = () => {
       city: data.city,
       county: data.county,
       streetAddress: data.streetAddress,
-      customerId: customer?.id,
+      customerId: loggedInUser.id,
       desiredOrderItems: cart.map((item) => ({
         productId: item.product.id,
         locationId: item.location.id,
@@ -123,7 +124,7 @@ export const PlaceOrderPage: React.FC = () => {
           <button
             type="submit"
             className="btn-place-order"
-            disabled={!customer || isPlaceOrderLoading}
+            disabled={!loggedInUser || isPlaceOrderLoading}
           >
             {isPlaceOrderLoading ? 'Placing Order...' : 'Place Order'}
           </button>

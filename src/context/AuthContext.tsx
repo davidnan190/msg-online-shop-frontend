@@ -4,18 +4,25 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useMemo,
   useState,
 } from 'react';
 
+import { ICustomer } from '../types/customers/customer.interface';
 import { LocalStorageKey } from '../enums/local-storage-key.enum';
 import { Role } from '../enums/role.enum';
 
 interface AuthContextType {
   accessToken: string | null;
   refreshToken: string | null;
+  isCustomer: () => boolean;
+  isAdmin: () => boolean;
+  retrieveLoggedInUser: () => ICustomer | null;
   userRole: Role | null;
-  login: (accessToken: string, refreshToken: string, userRole: Role) => void;
+  login: (
+    accessToken: string,
+    refreshToken: string,
+    loggedInUser: ICustomer
+  ) => void;
   logout: () => void;
 }
 
@@ -25,11 +32,15 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [accessToken, setAccessToken] = useState<string | null>(
     localStorage.getItem(LocalStorageKey.ACCESS_TOKEN)
   );
+
   const [refreshToken, setRefreshToken] = useState<string | null>(
     localStorage.getItem(LocalStorageKey.REFRESH_TOKEN)
   );
-  const [userRole, setUserRole] = useState<Role | null>(
-    localStorage.getItem(LocalStorageKey.LOGGED_IN_USER_ROLE) as Role | null
+
+  const [loggedInUser, setLoggedInUser] = useState<ICustomer | null>(
+    localStorage.getItem(LocalStorageKey.LOGGED_IN_USER)
+      ? JSON.parse(localStorage.getItem(LocalStorageKey.LOGGED_IN_USER) as string)
+      : null
   );
 
   useEffect(() => {
@@ -49,40 +60,55 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   }, [refreshToken]);
 
   useEffect(() => {
-    if (userRole) {
-      localStorage.setItem(LocalStorageKey.LOGGED_IN_USER_ROLE, userRole);
+    if (loggedInUser) {
+      localStorage.setItem(
+        LocalStorageKey.LOGGED_IN_USER,
+        JSON.stringify(loggedInUser)
+      );
     } else {
-      localStorage.removeItem(LocalStorageKey.LOGGED_IN_USER_ROLE);
+      localStorage.removeItem(LocalStorageKey.LOGGED_IN_USER);
     }
-  }, [userRole]);
+  }, [loggedInUser]);
+
+  const isCustomer = () => {
+    return loggedInUser?.role === Role.CUSTOMER;
+  };
+
+  const isAdmin = () => {
+    return loggedInUser?.role === Role.ADMIN;
+  };
 
   const login = (
     newAccessToken: string,
     newRefreshToken: string,
-    newUserRole: Role
+    newLoggedInUser: ICustomer
   ) => {
     setAccessToken(newAccessToken);
     setRefreshToken(newRefreshToken);
-    setUserRole(newUserRole);
+    setLoggedInUser(newLoggedInUser);
   };
 
   const logout = useCallback(() => {
     setAccessToken(null);
     setRefreshToken(null);
-    setUserRole(null);
+    setLoggedInUser(null);
   }, []);
 
+  const retrieveLoggedInUser = (): ICustomer | null => {
+    const user = localStorage.getItem(LocalStorageKey.LOGGED_IN_USER);
+    return user ? JSON.parse(user) as ICustomer : null;
+  };
 
-  const value = useMemo(
-    () => ({
-      accessToken,
-      refreshToken,
-      userRole,
-      login,
-      logout,
-    }),
-    [accessToken, refreshToken, userRole, login, logout]
-  );
+  const value = {
+    accessToken,
+    refreshToken,
+    retrieveLoggedInUser,
+    userRole: loggedInUser ? loggedInUser.role : null,
+    isCustomer,
+    isAdmin,
+    login,
+    logout,
+  };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

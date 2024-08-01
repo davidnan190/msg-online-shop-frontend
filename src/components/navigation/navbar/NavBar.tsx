@@ -3,15 +3,15 @@ import './NavBar.scss';
 import { NavLink, Outlet } from 'react-router-dom';
 
 import CustomerProfileDropdown from '../dropdown/CustomerProfileDropdown';
+import { ICustomer } from '../../../types/customers/customer.interface';
 import { NavBarLinks } from '../navbar-links/NavBarLinks';
-import { TEMP_HARDCODED_CUSTOMER_ID } from '../../../constants/api.constants';
 import appLogo from '../../../assets/msg-logo.png';
+import { useAuthContext } from '../../../context/AuthContext';
 import { useFetchCustomer } from '../../../hooks/customers/useFetchCustomer';
 
 export const NavBar: React.FC = () => {
-  const { customer, isLoading, error } = useFetchCustomer(
-    TEMP_HARDCODED_CUSTOMER_ID
-  );
+  const { retrieveLoggedInUser } = useAuthContext();
+  const loggedInUser = retrieveLoggedInUser() as ICustomer;
 
   return (
     <>
@@ -21,11 +21,8 @@ export const NavBar: React.FC = () => {
             <img src={appLogo} alt="Logo" className="logo" />
           </NavLink>
           <div className="navbar-collapse">
-            <NavBarLinks customer={customer} />
-            <CustomerProfileDropdown
-              customer={customer}
-              isLoading={isLoading}
-            />
+            <NavBarLinks customer={loggedInUser} />
+            <CustomerProfileDropdown customer={loggedInUser} />
           </div>
         </div>
       </nav>

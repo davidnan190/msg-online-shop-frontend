@@ -2,18 +2,18 @@ import {
   ABORT_ERROR,
   ERROR_REQUEST_CANCELLED_BY_CLIENT,
 } from '../constants/api.constants';
+import {
+  AUTHORIZATION_HEADER,
+  BEARER_TOKEN_PREFIX,
+} from '../constants/auth.constants';
 
+import { IFetchOptions } from '../types/requests/fetch-options.interface';
 import axiosInstance from '../api/axios-instance';
-import { useAuthContext } from '../context/AuthContext';
 
 export const handleApiError = (error: any): void => {
   console.error('API call failed:', error);
   throw error;
 };
-
-interface IFetchOptions extends RequestInit {
-  headers?: Record<string, string>;
-}
 
 export async function fetchWithCancellation<T>(
   url: string,
@@ -38,17 +38,17 @@ export async function fetchWithCancellation<T>(
 export const createHeaders = (accessToken?: string): Record<string, string> => {
   const headers: Record<string, string> = {};
   if (accessToken) {
-    headers['Authorization'] = `Bearer ${accessToken}`;
+    headers[AUTHORIZATION_HEADER] = `${BEARER_TOKEN_PREFIX}${accessToken}`;
   }
   return headers;
 };
 
 export const setAxiosAccessToken = (accessToken: string) => {
   axiosInstance.defaults.headers.common[
-    'Authorization'
-  ] = `Bearer ${accessToken}`;
+    AUTHORIZATION_HEADER
+  ] = `${BEARER_TOKEN_PREFIX}${accessToken}`;
 };
 
 export const clearAxiosAccessToken = () => {
-  axiosInstance.defaults.headers.common['Authorization'] = null;
+  axiosInstance.defaults.headers.common[AUTHORIZATION_HEADER] = null;
 };

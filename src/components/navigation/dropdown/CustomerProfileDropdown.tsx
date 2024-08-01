@@ -7,12 +7,10 @@ import { NavLink } from 'react-router-dom';
 
 type CustomerProfileDropdownProps = {
   customer: ICustomer | undefined;
-  isLoading: boolean;
 };
 
 const CustomerProfileDropdown: React.FC<CustomerProfileDropdownProps> = ({
   customer,
-  isLoading,
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -20,11 +18,7 @@ const CustomerProfileDropdown: React.FC<CustomerProfileDropdownProps> = ({
     <div className="dropdown">
       <div className="profile-dropdown" onClick={() => setIsOpen(!isOpen)}>
         <img
-          src={
-            isLoading
-              ? 'https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExODF4MTlob2VueGN5YTk4dTFhZTVleGplZGRhNndlYjVpeTkwaHNpdCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7bu3XilJ5BOiSGic/giphy.gif'
-              : 'https://via.placeholder.com/480'
-          }
+          src={'https://via.placeholder.com/480'}
           alt="User"
           className="profile-pic"
         />
