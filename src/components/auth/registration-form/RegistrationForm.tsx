@@ -1,30 +1,16 @@
 import './RegistrationForm.scss';
 
+import {
+  RegistrationSchema,
+  registrationSchema,
+} from '../../../types/schemas/registration-schema';
+
 import React from 'react';
 import { RegistrationRequest } from '../../../types/auth/registration-request.type';
 import { RegistrationResponse } from '../../../types/auth/registration-response.type';
 import { Role } from '../../../enums/role.enum';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-
-const registrationSchema = z
-  .object({
-    firstName: z.string().min(3, 'First name is required'),
-    lastName: z.string().min(3, 'Last name is required'),
-    username: z.string().min(3, 'Username is required'),
-    emailAddress: z
-      .string()
-      .min(3, 'Email address is required')
-      .email('Invalid email address'),
-    password: z.string().min(1, 'Password is required'),
-    confirmPassword: z.string().min(1, 'Password confirmation is required.'),
-  })
-  .refine((formData) => formData.password === formData.confirmPassword, {
-    message: "Passwords don't match. Please check again.",
-    path: ['confirmPassword'],
-  });
-
 
 type Props = {
   onRegister: (
@@ -34,15 +20,16 @@ type Props = {
 };
 
 const RegistrationForm: React.FC<Props> = ({ onRegister, isLoading }) => {
-  const { register, handleSubmit, formState, reset } = useForm<RegistrationRequest>({
-    resolver: zodResolver(registrationSchema),
-    mode: 'onTouched',
-  });
+  const { register, handleSubmit, formState, reset } =
+    useForm<RegistrationSchema>({
+      resolver: zodResolver(registrationSchema),
+      mode: 'onTouched',
+    });
 
-  const handleRegistration = async (credentials: RegistrationRequest) => {
+  const handleRegistration = async (credentials: RegistrationSchema) => {
     console.log('Submitted credentials:', credentials);
     try {
-      const result = await onRegister({...credentials, role: Role.ADMIN});
+      const result = await onRegister({ ...credentials, role: Role.ADMIN });
       if (result) {
         alert(result.message);
       }

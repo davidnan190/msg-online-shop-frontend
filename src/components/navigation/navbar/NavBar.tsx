@@ -11,9 +11,11 @@ import { clearAxiosAccessToken } from '../../../utils/request.utils';
 import { useAuthContext } from '../../../context/AuthContext';
 
 export const NavBar: React.FC = () => {
-  const { retrieveLoggedInUser, logout } = useAuthContext();
+  const { retrieveLoggedInUser, logout, accessToken } = useAuthContext();
   const loggedInUser = retrieveLoggedInUser() as ICustomer;
   const navigate = useNavigate();
+
+  console.log(accessToken)
 
   const handleLogout = () => {
     logout();

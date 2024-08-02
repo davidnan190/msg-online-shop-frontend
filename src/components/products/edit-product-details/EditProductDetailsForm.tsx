@@ -1,53 +1,42 @@
 import './EditProductDetailsForm.scss';
 
+import { EditProductSchema, editProductSchema } from '../../../types/schemas/edit-product-schema';
+import React, { useEffect } from 'react';
+
 import { IProduct } from '../../../types/products/product.interface';
 import { IProductCategory } from '../../../types/products/product-category.interface';
 import { PRODUCTS_URL_PREFIX } from '../../../constants/api.constants';
-import { useEffect } from 'react';
+import { transformProductToEditSchema } from '../../../utils/transformProduct';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useUpdateProduct } from '../../../hooks/products/useUpdateProduct';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-const schema = z.object({
-  id: z.string(),
-  name: z.string().min(3, 'Name is required'),
-  description: z.string().min(3, 'Description is required'),
-  price: z.number().min(1, 'Price must be positive'),
-  weight: z.number().min(1, 'Weight must be positive'),
-  imageUrl: z.string().url('Invalid URL').optional(),
-  categoryId: z.string().min(1, 'Category is required'),
-});
-
-type FormData = z.infer<typeof schema>;
-
-type Props = {
+type EditProductDetailsProps = {
   product: IProduct;
   availableCategories: IProductCategory[] | undefined;
   toggleIsEditing: () => void;
 };
 
-export const EditProductForm: React.FC<Props> = ({
+export const EditProductForm: React.FC<EditProductDetailsProps> = ({
   product,
   availableCategories,
   toggleIsEditing,
 }) => {
   const { updateProduct, isLoading, error } = useUpdateProduct();
+  const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<FormData>({
-    resolver: zodResolver(schema),
-    defaultValues: product,
+  } = useForm<EditProductSchema>({
+    resolver: zodResolver(editProductSchema),
+    defaultValues: transformProductToEditSchema(product),
   });
 
-  const navigate = useNavigate();
-
-  const handleUpdateProduct = async (data: FormData) => {
+  const handleUpdateProduct = async (data: EditProductSchema) => {
     const selectedCategory = availableCategories?.find(
       (category) => category.id === data.categoryId
     );
@@ -69,13 +58,13 @@ export const EditProductForm: React.FC<Props> = ({
   };
 
   const handleCancelEdit = () => {
-    reset({ ...product, categoryId: product.category.id });
+    reset(transformProductToEditSchema(product));
     toggleIsEditing();
   };
 
   useEffect(() => {
     if (product) {
-      reset({ ...product, categoryId: product.category.id });
+      reset(transformProductToEditSchema(product));
     }
   }, [product, reset]);
 

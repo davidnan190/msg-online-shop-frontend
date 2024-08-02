@@ -1,5 +1,7 @@
 import './LoginForm.scss';
 
+import { LoginSchema, loginSchema } from '../../../types/schemas/login-schema';
+
 import { LoginRequest } from '../../../types/auth/login-request.type';
 import { PRODUCTS_URL_PREFIX } from '../../../constants/api.constants';
 import React from 'react';
@@ -8,20 +10,11 @@ import { useAuthContext } from '../../../context/AuthContext';
 import { useForm } from 'react-hook-form';
 import { useLogin } from '../../../hooks/auth/useLogin';
 import { useNavigate } from 'react-router-dom';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-
-const loginSchema = z.object({
-  emailAddress: z
-    .string()
-    .min(3, 'Email is required')
-    .email('Entered email is invalid.'),
-  password: z.string().min(3, 'Password is required'),
-});
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
-  const { register, handleSubmit, formState } = useForm<LoginRequest>({
+  const { register, handleSubmit, formState } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     mode: 'onTouched',
   });
@@ -37,11 +30,11 @@ const LoginForm: React.FC = () => {
         response.tokens.refreshToken,
         response.customer
       );
-    }
 
-    if (accessToken) {
-      setAxiosAccessToken(accessToken);
-      navigate(PRODUCTS_URL_PREFIX);
+      if (response.tokens.accessToken) {
+        setAxiosAccessToken(response.tokens.accessToken);
+        navigate(PRODUCTS_URL_PREFIX);
+      }
     }
   };
 

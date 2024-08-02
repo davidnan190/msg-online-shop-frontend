@@ -1,5 +1,6 @@
 import './CreateProductForm.scss';
 
+import { CreateProductSchema, createProductSchema } from '../../../types/schemas/create-product-schema';
 import React, { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
@@ -12,26 +13,6 @@ import { useCreateProduct } from '../../../hooks/products/useCreateProduct';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-
-const schema = z.object({
-  name: z.string().min(3, 'Name is required'),
-  description: z.string().min(3, 'Description is required'),
-  price: z.number().min(1, 'Price must be positive'),
-  weight: z.number().min(1, 'Weight must be positive'),
-  imageUrl: z.string().optional(),
-  categoryId: z.string().min(1, 'Category is required'),
-  supplier: z.string().min(5, 'Supplier is required'),
-  stockData: z
-    .array(
-      z.object({
-        locationId: z.string().min(1, 'Location ID is required'),
-        quantity: z.number().min(1, 'Quantity must be positive'),
-      })
-    )
-    .min(1, 'At least one stock entry is required'),
-});
-
-type FormData = z.infer<typeof schema>;
 
 type Props = {
   availableCategories: IProductCategory[] | undefined;
@@ -57,8 +38,8 @@ export const CreateProductForm: React.FC<Props> = ({
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm<FormData>({
-    resolver: zodResolver(schema),
+  } = useForm<CreateProductSchema>({
+    resolver: zodResolver(createProductSchema),
   });
 
   const { fields, append, remove } = useFieldArray({
@@ -66,7 +47,7 @@ export const CreateProductForm: React.FC<Props> = ({
     name: 'stockData',
   });
 
-  const validateUniqueLocations = (stockData: FormData['stockData']) => {
+  const validateUniqueLocations = (stockData: CreateProductSchema['stockData']) => {
     const locationIds = stockData.map((item) => item.locationId);
     const uniqueLocationIds = new Set(locationIds);
     if (uniqueLocationIds.size !== locationIds.length) {
@@ -76,7 +57,7 @@ export const CreateProductForm: React.FC<Props> = ({
     return null;
   };
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: CreateProductSchema) => {
     const uniqueLocationError = validateUniqueLocations(data.stockData);
     if (uniqueLocationError) {
       setError('stockData', { type: 'manual', message: uniqueLocationError });

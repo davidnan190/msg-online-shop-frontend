@@ -1,4 +1,4 @@
-import { CreateProductForm } from '../../components/products/create-product/CreateProductForm';
+import  { CreateProductForm } from '../../components/products/create-product/CreateProductForm';
 import { PRODUCTS_URL_PREFIX } from '../../constants/api.constants';
 import React from 'react';
 import { useFetchLocations } from '../../hooks/locations/useFetchLocations';

@@ -3,30 +3,25 @@ import './PlaceOrderPage.scss';
 import { CartItem } from '../../components/cart/cart-item/CartItem';
 import { CartTotal } from '../../components/cart/cart-total/CartTotal';
 import { CreateOrderRequest } from '../../types/orders/create-order-request.type';
+import { LOGIN_URL_PREFIX } from '../../constants/api.constants';
+import { OrderForm } from '../../components/orders/order-form/OrderForm';
+import { PlaceOrderSchema } from '../../types/schemas/place-order-schema';
 import React from 'react';
 import { useAuthContext } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
-import { useForm } from 'react-hook-form';
 import { useLogger } from '../../context/LoggerContext';
+import { useNavigate } from 'react-router-dom';
 import { usePlaceOrder } from '../../hooks/orders/usePlaceOrder';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-
-const schema = z.object({
-  country: z.string().min(3, 'Country is required'),
-  city: z.string().min(3, 'City is required'),
-  county: z.string().min(3, 'County is required'),
-  streetAddress: z.string().min(3, 'Street address is required'),
-});
-type FormData = z.infer<typeof schema>;
 
 export const PlaceOrderPage: React.FC = () => {
   const { cart, clearCart } = useCart();
   const { retrieveLoggedInUser } = useAuthContext();
   const loggedInUser = retrieveLoggedInUser();
+  const navigate = useNavigate();
 
   if (!loggedInUser) {
-    return;
+    navigate(LOGIN_URL_PREFIX);
+    return null;
   }
 
   const {
@@ -37,15 +32,7 @@ export const PlaceOrderPage: React.FC = () => {
 
   const logger = useLogger();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>({
-    resolver: zodResolver(schema),
-  });
-
-  const onSubmit = async (data: FormData) => {
+  const handlePlaceOrder = async (data: PlaceOrderSchema) => {
     if (!loggedInUser) {
       return;
     }
@@ -88,48 +75,7 @@ export const PlaceOrderPage: React.FC = () => {
           <CartItem key={index} item={item} />
         ))}
         <CartTotal cart={cart} />
-        <form className="order-form" onSubmit={handleSubmit(onSubmit)}>
-          <div className="form-group">
-            <label htmlFor="country">Country</label>
-            <input type="text" id="country" {...register('country')} />
-            {errors.country && (
-              <p className="error-message">{errors.country.message}</p>
-            )}
-          </div>
-          <div className="form-group">
-            <label htmlFor="city">City</label>
-            <input type="text" id="city" {...register('city')} />
-            {errors.city && (
-              <p className="error-message">{errors.city.message}</p>
-            )}
-          </div>
-          <div className="form-group">
-            <label htmlFor="county">County</label>
-            <input type="text" id="county" {...register('county')} />
-            {errors.county && (
-              <p className="error-message">{errors.county.message}</p>
-            )}
-          </div>
-          <div className="form-group">
-            <label htmlFor="streetAddress">Street Address</label>
-            <input
-              type="text"
-              id="streetAddress"
-              {...register('streetAddress')}
-            />
-            {errors.streetAddress && (
-              <p className="error-message">{errors.streetAddress.message}</p>
-            )}
-          </div>
-          <button
-            type="submit"
-            className="btn-place-order"
-            disabled={!loggedInUser || isPlaceOrderLoading}
-          >
-            {isPlaceOrderLoading ? 'Placing Order...' : 'Place Order'}
-          </button>
-        </form>
-        {placeOrderError && <p className="error-message">{placeOrderError}</p>}
+        <OrderForm onSubmit={handlePlaceOrder} isLoading={isPlaceOrderLoading} errors={placeOrderError} />
       </div>
     </>
   );

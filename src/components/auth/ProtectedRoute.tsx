@@ -6,7 +6,10 @@ const ProtectedRoute = () => {
   const location = useLocation();
   const { accessToken } = useAuthContext()
 
+  console.log(accessToken)
+
   return accessToken ? (
+
     <Outlet />
   ) : (
     <Navigate to={'/login'} replace state={{ from: location }} />

@@ -7,26 +7,12 @@ import React, {
   useState,
 } from 'react';
 
+import { IAuthContextType } from '../types/contexts/auth-context-type.interface';
 import { ICustomer } from '../types/customers/customer.interface';
 import { LocalStorageKey } from '../enums/local-storage-key.enum';
 import { Role } from '../enums/role.enum';
 
-interface AuthContextType {
-  accessToken: string | null;
-  refreshToken: string | null;
-  isCustomer: () => boolean;
-  isAdmin: () => boolean;
-  retrieveLoggedInUser: () => ICustomer | null;
-  userRole: Role | null;
-  login: (
-    accessToken: string,
-    refreshToken: string,
-    loggedInUser: ICustomer
-  ) => void;
-  logout: () => void;
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<IAuthContextType | undefined>(undefined);
 
 const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [accessToken, setAccessToken] = useState<string | null>(
@@ -39,7 +25,9 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   const [loggedInUser, setLoggedInUser] = useState<ICustomer | null>(
     localStorage.getItem(LocalStorageKey.LOGGED_IN_USER)
-      ? JSON.parse(localStorage.getItem(LocalStorageKey.LOGGED_IN_USER) as string)
+      ? JSON.parse(
+          localStorage.getItem(LocalStorageKey.LOGGED_IN_USER) as string
+        )
       : null
   );
 
@@ -96,7 +84,7 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   const retrieveLoggedInUser = (): ICustomer | null => {
     const user = localStorage.getItem(LocalStorageKey.LOGGED_IN_USER);
-    return user ? JSON.parse(user) as ICustomer : null;
+    return user ? (JSON.parse(user) as ICustomer) : null;
   };
 
   const value = {
@@ -113,7 +101,7 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-const useAuthContext = (): AuthContextType => {
+const useAuthContext = (): IAuthContextType => {
   const context = useContext(AuthContext);
   if (context === undefined) {
     throw new Error('useAuthContext must be used within an AuthProvider');

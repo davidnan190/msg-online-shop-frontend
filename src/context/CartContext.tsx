@@ -6,18 +6,11 @@ import React, {
   useState,
 } from 'react';
 
+import { ICartContextProps } from '../types/contexts/cart-context-props.interface';
 import { ICartItem } from '../types/cart/cart-item.interface';
 import { ILocation } from '../types/locations/location.interface';
 import { IProduct } from '../types/products/product.interface';
 import { LocalStorageKey } from '../enums/local-storage-key.enum';
-
-interface ICartContextProps {
-  cart: ICartItem[];
-  addToCart: (product: IProduct, quantity: number, location: ILocation) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
-  removeFromCart: (productId: string) => void;
-  clearCart: () => void;
-}
 
 const CartContext = createContext<ICartContextProps | undefined>(undefined);
 
