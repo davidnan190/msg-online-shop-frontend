@@ -3,7 +3,7 @@ import './ProductDetailsImage.scss';
 import React from 'react';
 
 type ProductDetailsImageProps = {
-  imageUrl: string;
+  imageUrl: string | undefined;
 };
 
 export const ProductDetailsImage: React.FC<ProductDetailsImageProps> = ({ imageUrl }) => {

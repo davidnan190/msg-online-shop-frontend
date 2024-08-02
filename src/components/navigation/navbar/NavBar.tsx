@@ -1,17 +1,27 @@
 import './NavBar.scss';
 
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 
 import CustomerProfileDropdown from '../dropdown/CustomerProfileDropdown';
+import { ICustomer } from '../../../types/customers/customer.interface';
+import { LOGIN_URL_PREFIX } from '../../../constants/api.constants';
 import { NavBarLinks } from '../navbar-links/NavBarLinks';
-import { TEMP_HARDCODED_CUSTOMER_ID } from '../../../constants/api.constants';
 import appLogo from '../../../assets/msg-logo.png';
-import { useFetchCustomer } from '../../../hooks/customers/useFetchCustomer';
+import { clearAxiosAccessToken } from '../../../utils/request.utils';
+import { useAuthContext } from '../../../context/AuthContext';
 
 export const NavBar: React.FC = () => {
-  const { customer, isLoading, error } = useFetchCustomer(
-    TEMP_HARDCODED_CUSTOMER_ID
-  );
+  const { retrieveLoggedInUser, logout, accessToken } = useAuthContext();
+  const loggedInUser = retrieveLoggedInUser() as ICustomer;
+  const navigate = useNavigate();
+
+  console.log(accessToken)
+
+  const handleLogout = () => {
+    logout();
+    clearAxiosAccessToken();
+    navigate(LOGIN_URL_PREFIX);
+  };
 
   return (
     <>
@@ -21,10 +31,10 @@ export const NavBar: React.FC = () => {
             <img src={appLogo} alt="Logo" className="logo" />
           </NavLink>
           <div className="navbar-collapse">
-            <NavBarLinks customer={customer} />
+            <NavBarLinks />
             <CustomerProfileDropdown
-              customer={customer}
-              isLoading={isLoading}
+              customer={loggedInUser}
+              onLogout={handleLogout}
             />
           </div>
         </div>

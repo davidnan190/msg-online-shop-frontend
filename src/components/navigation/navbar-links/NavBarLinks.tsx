@@ -1,15 +1,12 @@
 import './NavBarLinks.scss';
 
-import { ICustomer } from '../../../types/customers/customer.interface';
 import { NavLink } from 'react-router-dom';
 import React from 'react';
-import { Role } from '../../../enums/role.enum';
+import { useAuthContext } from '../../../context/AuthContext';
 
-type NavBarLinksProps = {
-  customer: ICustomer | undefined;
-};
+export const NavBarLinks: React.FC = () => {
+  const { isAdmin } = useAuthContext();
 
-export const NavBarLinks: React.FC<NavBarLinksProps> = ({ customer }) => {
   return (
     <ul className="navbar-nav">
       <li className="nav-item">
@@ -24,12 +21,19 @@ export const NavBarLinks: React.FC<NavBarLinksProps> = ({ customer }) => {
         </NavLink>
       </li>
 
-      {customer?.role === Role.ADMIN && (
-        <li className="nav-item">
-          <NavLink to="/stock" end className="nav-link">
-            <strong>Stock</strong>
-          </NavLink>
-        </li>
+      {isAdmin() && (
+        <>
+          <li className="nav-item">
+            <NavLink to="/products/create" end className="nav-link">
+              <strong>Add Product</strong>
+            </NavLink>
+          </li>
+          <li className="nav-item">
+            <NavLink to="/stock" end className="nav-link">
+              <strong>Stock</strong>
+            </NavLink>
+          </li>
+        </>
       )}
     </ul>
   );

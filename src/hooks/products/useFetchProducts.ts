@@ -1,9 +1,8 @@
-import axios, { CancelTokenSource } from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 
-import { ERROR_REQUEST_CANCELLED_BY_CLIENT } from '../../constants/api.constants';
 import { IProduct } from '../../types/products/product.interface';
 import { productService } from '../../services/product.service';
+import { useAuthContext } from '../../context/AuthContext';
 import { useLogger } from '../../context/LoggerContext';
 
 type FetchResult = {
@@ -18,32 +17,35 @@ export const useFetchProducts = (): FetchResult => {
   const [error, setError] = useState<string | null>(null);
 
   const logger = useLogger();
+  const { accessToken } = useAuthContext();
 
-  const fetchProducts = useCallback(async (cancelToken: CancelTokenSource) => {
-    setIsLoading(true);
-    setError(null);
+  const fetchProducts = useCallback(
+    async (signal: AbortSignal) => {
+      setIsLoading(true);
+      setError(null);
 
-    try {
-      const data = await productService.getAllProducts(cancelToken);
-      setProducts(data);
-      logger.debug(`Fetch Products Data: ${data}`, {
-        hook: 'useFetchProducts',
-        action: 'fetchProducts',
-      });
-    } catch (err) {
-      if (!axios.isCancel(err)) setError((err as Error).message);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+      try {
+        if (!accessToken) {
+          throw new Error('No access token available');
+        }
+        const data = await productService.getAllProducts(signal, accessToken);
+        setProducts(data);
+      } catch (err) {
+        setError((err as Error).message);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [accessToken, logger]
+  );
 
   useEffect(() => {
-    const cancelTokenSource = axios.CancelToken.source();
+    const abortController = new AbortController();
 
-    fetchProducts(cancelTokenSource);
+    fetchProducts(abortController.signal);
 
     return () => {
-      cancelTokenSource.cancel(ERROR_REQUEST_CANCELLED_BY_CLIENT);
+      abortController.abort();
     };
   }, [fetchProducts]);
 

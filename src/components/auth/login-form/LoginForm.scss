@@ -1,0 +1,72 @@
+@import '../../../styles/variables.scss';
+
+.login-form {
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+
+    label {
+      margin-bottom: 8px;
+      color: var(--primary-color);
+    }
+
+    input {
+      padding: 6px;
+      width: 96%;
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+    }
+
+    .invalid-feedback {
+      color: darkred;
+      font-size: 0.875em;
+      margin-top: 4px;
+    }
+
+    .is-valid {
+      border-color: var(--success-color);
+    }
+
+    .is-invalid {
+      border-color: var(--danger-color);
+    }
+  }
+
+  .btn-primary {
+    padding: 8px 16px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:disabled {
+      background-color: darken($primary-color, 5%);
+      cursor: not-allowed;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: darken($primary-color, 5%);
+    }
+  }
+
+  .spinner-border {
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-left-color: var(--primary-color);
+    border-radius: 50%;
+    width: 1rem;
+    height: 1rem;
+    animation: spin 0.75s linear infinite;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+}

@@ -14,6 +14,7 @@ export const ProductsPage: React.FC = () => {
 
   if (isProductsLoading) return <p>Loading...</p>;
 
+
   if (productsError)
     return (
       <p>

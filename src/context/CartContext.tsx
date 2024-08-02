@@ -6,21 +6,13 @@ import React, {
   useState,
 } from 'react';
 
+import { ICartContextProps } from '../types/contexts/cart-context-props.interface';
 import { ICartItem } from '../types/cart/cart-item.interface';
 import { ILocation } from '../types/locations/location.interface';
 import { IProduct } from '../types/products/product.interface';
-
-interface ICartContextProps {
-  cart: ICartItem[];
-  addToCart: (product: IProduct, quantity: number, location: ILocation) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
-  removeFromCart: (productId: string) => void;
-  clearCart: () => void;
-}
+import { LocalStorageKey } from '../enums/local-storage-key.enum';
 
 const CartContext = createContext<ICartContextProps | undefined>(undefined);
-
-const CART_LOCAL_STORAGE_KEY = 'cart';
 
 export const useCart = (): ICartContextProps => {
   const context = useContext(CartContext);
@@ -34,12 +26,12 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [cart, setCart] = useState<ICartItem[]>(() => {
-    const savedCart = localStorage.getItem(CART_LOCAL_STORAGE_KEY);
+    const savedCart = localStorage.getItem(LocalStorageKey.SHOPPING_CART);
     return savedCart ? JSON.parse(savedCart) : [];
   });
 
   useEffect(() => {
-    localStorage.setItem(CART_LOCAL_STORAGE_KEY, JSON.stringify(cart));
+    localStorage.setItem(LocalStorageKey.SHOPPING_CART, JSON.stringify(cart));
   }, [cart]);
 
   const addToCart = (

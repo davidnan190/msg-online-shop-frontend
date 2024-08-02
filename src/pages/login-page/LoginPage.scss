@@ -1,0 +1,37 @@
+// @import '../../../styles/variables.scss';
+
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 450px; 
+  padding: 16px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: var(--border-radius);
+  background-color: #fff;
+}
+
+.login-card-body {
+  padding: 15px;
+}
+
+.login-card-header {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 15px;
+}
+
+.login-alert {
+  background-color: #f8d7da;
+  color: var(--primary-color);
+  border: 1px solid #f5c6cb;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
