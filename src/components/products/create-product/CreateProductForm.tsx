@@ -1,6 +1,9 @@
 import './CreateProductForm.scss';
 
-import { CreateProductSchema, createProductSchema } from '../../../types/schemas/create-product-schema';
+import {
+  CreateProductSchema,
+  createProductSchema,
+} from '../../../types/schemas/create-product-schema';
 import React, { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
@@ -9,18 +12,16 @@ import { ILocation } from '../../../types/locations/location.interface';
 import { IProductCategory } from '../../../types/products/product-category.interface';
 import { IStockData } from '../../../types/stocks/stock-data.interface';
 import { Supplier } from '../../../enums/supplier.enum';
-import { useCreateProduct } from '../../../hooks/products/useCreateProduct';
-import { useNavigate } from 'react-router-dom';
-import { z } from 'zod';
+import { useCreateProductMutation } from '../../../services/productAPI';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-type Props = {
+type CreateProductProps = {
   availableCategories: IProductCategory[] | undefined;
   availableLocations: ILocation[] | undefined;
   onSuccess: () => void;
 };
 
-export const CreateProductForm: React.FC<Props> = ({
+export const CreateProductForm: React.FC<CreateProductProps> = ({
   availableCategories,
   availableLocations,
   onSuccess,
@@ -29,8 +30,7 @@ export const CreateProductForm: React.FC<Props> = ({
     ILocation | undefined
   >(availableLocations ? availableLocations[0] : undefined);
 
-  const { createProduct, isLoading, error } = useCreateProduct();
-
+  const [createProduct, { isLoading }] = useCreateProductMutation();
 
   const {
     register,
@@ -47,12 +47,14 @@ export const CreateProductForm: React.FC<Props> = ({
     name: 'stockData',
   });
 
-  const validateUniqueLocations = (stockData: CreateProductSchema['stockData']) => {
+  const validateUniqueLocations = (
+    stockData: CreateProductSchema['stockData']
+  ) => {
     const locationIds = stockData.map((item) => item.locationId);
     const uniqueLocationIds = new Set(locationIds);
     if (uniqueLocationIds.size !== locationIds.length) {
       alert('Each stock data item must have a different location.');
-      return 'Each stock data item must have a different location.'
+      return 'Each stock data item must have a different location.';
     }
     return null;
   };
@@ -221,7 +223,6 @@ export const CreateProductForm: React.FC<Props> = ({
           Cancel
         </button>
       </div>
-      {error && <div className="error-message">{error}</div>}
     </form>
   );
 };

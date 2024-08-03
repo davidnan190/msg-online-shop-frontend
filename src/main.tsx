@@ -8,7 +8,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 import router from './router.tsx';
-import { setupStore } from './store/store.ts';
+import { setupStore } from './services/store.ts';
 
 const store = setupStore();
 

@@ -1,11 +1,8 @@
-// src/pages/products/ProductsPage.tsx
-
 import './ProductsPage.scss';
 
 import { ProductCard } from '../../components/products/product-card/ProductCard';
-import { useFetchLocations } from '../../hooks/locations/useFetchLocations';
-import { useGetAllLocationsQuery } from '../../api/locationAPI';
-import { useGetAllProductsQuery } from '../../api/productAPI';
+import { useGetAllLocationsQuery } from '../../services/locationAPI';
+import { useGetAllProductsQuery } from '../../services/productAPI';
 
 export const ProductsPage: React.FC = () => {
   const { data: products, isLoading, error } = useGetAllProductsQuery();

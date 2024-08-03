@@ -4,6 +4,10 @@ import {
   CART_URL_PREFIX,
   PRODUCTS_URL_PREFIX,
 } from '../../constants/api.constants';
+import {
+  useDeleteProductMutation,
+  useGetProductByIdQuery,
+} from '../../services/productAPI';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import EditProductForm from '../../components/products/edit-product-details/EditProductDetailsForm';
@@ -12,10 +16,8 @@ import { ProductDetailsActions } from '../../components/products/product-details
 import { ProductDetailsImage } from '../../components/products/product-details-image/ProductDetailsImage';
 import { ProductDetailsInfo } from '../../components/products/product-details-info/ProductDetailsInfo';
 import { useCart } from '../../context/CartContext';
-import { useDeleteProduct } from '../../hooks/products/useDeleteProduct';
-import { useFetchLocations } from '../../hooks/locations/useFetchLocations';
-import { useFetchProduct } from '../../hooks/products/useFetchProduct';
-import { useFetchProductCategories } from '../../hooks/categories/useFetchProductCategories';
+import { useGetAllCategoriesQuery } from '../../services/categoryAPI';
+import { useGetAllLocationsQuery } from '../../services/locationAPI';
 import { useState } from 'react';
 
 export const ProductDetailsPage: React.FC = () => {
@@ -24,20 +26,17 @@ export const ProductDetailsPage: React.FC = () => {
   const { addToCart } = useCart();
 
   const {
-    product,
+    data: product,
     isLoading: isFetchLoading,
     error: fetchError,
-  } = useFetchProduct(productId || '');
+  } = useGetProductByIdQuery(productId || '');
 
-  const { locations, error: locationsError } = useFetchLocations();
+  const { data: locations, error: locationsError } = useGetAllLocationsQuery();
 
-  const { categories, error: categoriesError } = useFetchProductCategories();
+  const { data: categories, error: categoriesError } =
+    useGetAllCategoriesQuery();
 
-  const {
-    deleteProduct,
-    isLoading: isDeleteLoading,
-    error: deleteError,
-  } = useDeleteProduct();
+  const [deleteProduct] = useDeleteProductMutation();
 
   const toggleIsEditing = () => {
     setIsEditing((prevValue) => !prevValue);
@@ -50,7 +49,7 @@ export const ProductDetailsPage: React.FC = () => {
   }
 
   if (fetchError) {
-    return <div>{fetchError}</div>;
+    return <div>Unable to load product</div>;
   }
 
   if (!product) {
@@ -94,7 +93,6 @@ export const ProductDetailsPage: React.FC = () => {
               />
             </>
           )}
-          {deleteError && <div className="error-message">{deleteError}</div>}
         </div>
       </div>
     </div>

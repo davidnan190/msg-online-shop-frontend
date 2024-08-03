@@ -1,6 +1,6 @@
 import { BACKEND_BASE_URL } from '../constants/api.constants';
 import { LocalStorageKey } from '../enums/local-storage-key.enum';
-import { RootState } from '../store/store';
+import { RootState } from './store';
 import { fetchBaseQuery } from '@reduxjs/toolkit/query';
 
 export const baseQueryWithAuth = fetchBaseQuery({

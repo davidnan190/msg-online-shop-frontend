@@ -1,8 +1,8 @@
 import { CreateProductForm } from '../../components/products/create-product/CreateProductForm';
 import { PRODUCTS_URL_PREFIX } from '../../constants/api.constants';
 import React from 'react';
-import { useGetAllCategoriesQuery } from '../../api/categoryAPI';
-import { useGetAllLocationsQuery } from '../../api/locationAPI';
+import { useGetAllCategoriesQuery } from '../../services/categoryAPI';
+import { useGetAllLocationsQuery } from '../../services/locationAPI';
 import { useNavigate } from 'react-router-dom';
 
 export const CreateProductPage: React.FC = () => {

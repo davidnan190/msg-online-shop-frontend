@@ -1,6 +1,9 @@
 import './EditProductDetailsForm.scss';
 
-import { EditProductSchema, editProductSchema } from '../../../types/schemas/edit-product-schema';
+import {
+  EditProductSchema,
+  editProductSchema,
+} from '../../../types/schemas/edit-product-schema';
 import React, { useEffect } from 'react';
 
 import { IProduct } from '../../../types/products/product.interface';
@@ -9,7 +12,7 @@ import { PRODUCTS_URL_PREFIX } from '../../../constants/api.constants';
 import { transformProductToEditSchema } from '../../../utils/transformProduct';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { useUpdateProduct } from '../../../hooks/products/useUpdateProduct';
+import { useUpdateProductMutation } from '../../../services/productAPI';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 type EditProductDetailsProps = {
@@ -23,7 +26,7 @@ export const EditProductForm: React.FC<EditProductDetailsProps> = ({
   availableCategories,
   toggleIsEditing,
 }) => {
-  const { updateProduct, isLoading, error } = useUpdateProduct();
+  const [updateProduct] = useUpdateProductMutation();
   const navigate = useNavigate();
 
   const {
@@ -138,7 +141,6 @@ export const EditProductForm: React.FC<EditProductDetailsProps> = ({
           Cancel
         </button>
       </div>
-      {error && <div className="error-message">{error}</div>}
     </form>
   );
 };

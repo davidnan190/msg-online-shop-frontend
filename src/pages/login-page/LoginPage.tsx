@@ -9,10 +9,9 @@ import { ActionLinks } from '../../components/auth/action-links/ActionLinks';
 import LoginForm from '../../components/auth/login-form/LoginForm';
 import { LoginRequest } from '../../types/auth/login-request.type';
 import { getErrorMessage } from '../../utils/error.utils';
-import { setAxiosAccessToken } from '../../utils/request.utils';
 import { toast } from 'react-toastify';
 import { useAuthContext } from '../../context/AuthContext';
-import { useLoginMutation } from '../../api/authAPI';
+import { useLoginMutation } from '../../services/authAPI';
 import { useNavigate } from 'react-router-dom';
 
 export const LoginPage: React.FC = () => {
@@ -28,7 +27,6 @@ export const LoginPage: React.FC = () => {
         response.tokens.refreshToken,
         response.customer
       );
-      setAxiosAccessToken(response.tokens.accessToken);
       navigate(PRODUCTS_URL_PREFIX);
       toast.success('Login successful!');
     } catch (err) {

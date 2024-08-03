@@ -6,7 +6,7 @@ import RegistrationForm from '../../components/auth/registration-form/Registrati
 import { RegistrationRequest } from '../../types/auth/registration-request.type';
 import { getErrorMessage } from '../../utils/error.utils';
 import { toast } from 'react-toastify';
-import { useRegisterMutation } from '../../api/authAPI';
+import { useRegisterMutation } from '../../services/authAPI';
 
 export const RegistrationPage: React.FC = () => {
   const [register, { isLoading, isSuccess, error }] = useRegisterMutation();

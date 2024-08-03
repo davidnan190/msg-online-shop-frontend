@@ -7,19 +7,21 @@ import { ICustomer } from '../../../types/customers/customer.interface';
 import { LOGIN_URL_PREFIX } from '../../../constants/api.constants';
 import { NavBarLinks } from '../navbar-links/NavBarLinks';
 import appLogo from '../../../assets/msg-logo.png';
-import { clearAxiosAccessToken } from '../../../utils/request.utils';
 import { useAuthContext } from '../../../context/AuthContext';
+import { useGetCustomerByIdQuery } from '../../../services/customerAPI';
 
 export const NavBar: React.FC = () => {
-  const { retrieveLoggedInUser, logout, accessToken } = useAuthContext();
-  const loggedInUser = retrieveLoggedInUser() as ICustomer;
+  const { loggedInUserId, logout, accessToken } = useAuthContext();
+  if (!loggedInUserId) {
+    return;
+  }
+  const { data: loggedInUser } = useGetCustomerByIdQuery(loggedInUserId);
   const navigate = useNavigate();
 
-  console.log(accessToken)
+  console.log(accessToken);
 
   const handleLogout = () => {
     logout();
-    clearAxiosAccessToken();
     navigate(LOGIN_URL_PREFIX);
   };
 
