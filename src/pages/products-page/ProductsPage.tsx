@@ -1,31 +1,27 @@
+// src/pages/products/ProductsPage.tsx
+
 import './ProductsPage.scss';
 
 import { ProductCard } from '../../components/products/product-card/ProductCard';
 import { useFetchLocations } from '../../hooks/locations/useFetchLocations';
-import { useFetchProducts } from '../../hooks/products/useFetchProducts';
+import { useGetAllLocationsQuery } from '../../api/locationAPI';
+import { useGetAllProductsQuery } from '../../api/productAPI';
 
 export const ProductsPage: React.FC = () => {
-  const {
-    products,
-    isLoading: isProductsLoading,
-    error: productsError,
-  } = useFetchProducts();
-  const { locations, error: locationsError } = useFetchLocations();
+  const { data: products, isLoading, error } = useGetAllProductsQuery();
+  const { data: locations, error: locationsError } = useGetAllLocationsQuery();
 
-  if (isProductsLoading) return <p>Loading...</p>;
-
-
-  if (productsError)
+  if (isLoading) return <p>Loading...</p>;
+  if (error)
     return (
       <p>
-        Seems like an error occured when trying to get you the latest products.
+        Seems like an error occurred when trying to get you the latest products.
       </p>
     );
-
   if (locationsError)
     return (
       <p>
-        Seems like an error occured when trying to get you the available
+        Seems like an error occurred when trying to get you the available
         locations of your products.
       </p>
     );

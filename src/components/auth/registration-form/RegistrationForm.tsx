@@ -7,15 +7,12 @@ import {
 
 import React from 'react';
 import { RegistrationRequest } from '../../../types/auth/registration-request.type';
-import { RegistrationResponse } from '../../../types/auth/registration-response.type';
 import { Role } from '../../../enums/role.enum';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 type Props = {
-  onRegister: (
-    credentials: RegistrationRequest
-  ) => Promise<RegistrationResponse | undefined>;
+  onRegister: (credentials: RegistrationRequest) => Promise<void>;
   isLoading: boolean;
 };
 
@@ -27,16 +24,12 @@ const RegistrationForm: React.FC<Props> = ({ onRegister, isLoading }) => {
     });
 
   const handleRegistration = async (credentials: RegistrationSchema) => {
-    console.log('Submitted credentials:', credentials);
     try {
-      const result = await onRegister({ ...credentials, role: Role.ADMIN });
-      if (result) {
-        alert(result.message);
-      }
+      await onRegister({ ...credentials, role: Role.CUSTOMER });
+      reset();
     } catch (error) {
       console.error('Registration failed:', error);
     }
-    reset();
   };
 
   return (

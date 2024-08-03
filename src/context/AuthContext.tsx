@@ -6,15 +6,19 @@ import React, {
   useEffect,
   useState,
 } from 'react';
+import { clearCredentials, setCredentials } from '../store/authCredentialsSlice';
 
 import { IAuthContextType } from '../types/contexts/auth-context-type.interface';
 import { ICustomer } from '../types/customers/customer.interface';
 import { LocalStorageKey } from '../enums/local-storage-key.enum';
 import { Role } from '../enums/role.enum';
+import { useDispatch } from 'react-redux';
 
 const AuthContext = createContext<IAuthContextType | undefined>(undefined);
 
 const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const dispatch = useDispatch();
+
   const [accessToken, setAccessToken] = useState<string | null>(
     localStorage.getItem(LocalStorageKey.ACCESS_TOKEN)
   );
@@ -74,13 +78,21 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     setAccessToken(newAccessToken);
     setRefreshToken(newRefreshToken);
     setLoggedInUser(newLoggedInUser);
+
+    dispatch(
+      setCredentials({
+        accessToken: newAccessToken,
+        refreshToken: newRefreshToken,
+      })
+    );
   };
 
   const logout = useCallback(() => {
     setAccessToken(null);
     setRefreshToken(null);
     setLoggedInUser(null);
-  }, []);
+    dispatch(clearCredentials());
+  }, [dispatch]);
 
   const retrieveLoggedInUser = (): ICustomer | null => {
     const user = localStorage.getItem(LocalStorageKey.LOGGED_IN_USER);

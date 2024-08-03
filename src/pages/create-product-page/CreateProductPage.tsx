@@ -1,23 +1,23 @@
-import  { CreateProductForm } from '../../components/products/create-product/CreateProductForm';
+import { CreateProductForm } from '../../components/products/create-product/CreateProductForm';
 import { PRODUCTS_URL_PREFIX } from '../../constants/api.constants';
 import React from 'react';
-import { useFetchLocations } from '../../hooks/locations/useFetchLocations';
-import { useFetchProductCategories } from '../../hooks/categories/useFetchProductCategories';
+import { useGetAllCategoriesQuery } from '../../api/categoryAPI';
+import { useGetAllLocationsQuery } from '../../api/locationAPI';
 import { useNavigate } from 'react-router-dom';
 
 export const CreateProductPage: React.FC = () => {
   const navigate = useNavigate();
-  const { categories, isLoading: categoriesLoading } =
-    useFetchProductCategories();
-  const { locations  } =
-    useFetchLocations();
-
+  const {
+    data: categories,
+    error: categoriesError,
+  } = useGetAllCategoriesQuery();
+  const { data: locations, error: locationsError } = useGetAllLocationsQuery();
   const handleSuccess = () => {
     navigate(PRODUCTS_URL_PREFIX);
   };
 
-  if (categoriesLoading) {
-    return <div>Loading...</div>;
+  if (categoriesError || locationsError) {
+    navigate(PRODUCTS_URL_PREFIX);
   }
 
   return (
