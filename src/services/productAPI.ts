@@ -1,3 +1,5 @@
+import { PRODUCTS_CACHING_TAG, PRODUCTS_URL_PREFIX } from '../constants/api.constants';
+
 import { CreateProductRequest } from '../types/products/create-product-request.type';
 import { HttpMethod } from '../enums/http-method.enum';
 import { IProduct } from '../types/products/product.interface';
@@ -8,17 +10,17 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 export const productAPI = createApi({
   reducerPath: 'productAPI',
   baseQuery: baseQueryWithAuth,
-  tagTypes: ['Products'],
+  tagTypes: [PRODUCTS_CACHING_TAG],
   endpoints: (builder) => ({
     getAllProducts: builder.query<IProduct[], void>({
       query: () => ({
-        url: '/products',
+        url: PRODUCTS_URL_PREFIX,
       }),
       keepUnusedDataFor: 120,
-      providesTags: () => ['Products'],
+      providesTags: () => [PRODUCTS_CACHING_TAG],
     }),
     getProductById: builder.query<IProduct, string>({
-      query: (productId) => `/products/${productId}`,
+      query: (productId) => `${PRODUCTS_URL_PREFIX}/${productId}`,
     }),
     createProduct: builder.mutation<IProduct, CreateProductRequest>({
       query: (newProductData) => ({
@@ -26,22 +28,22 @@ export const productAPI = createApi({
         method: HttpMethod.POST,
         body: newProductData,
       }),
-      invalidatesTags: (_, error) => (error ? [] : ['Products']),
+      invalidatesTags: (_, error) => (error ? [] : [PRODUCTS_CACHING_TAG]),
     }),
     updateProduct: builder.mutation<IProduct, UpdateProductRequest>({
       query: (updatedData) => ({
-        url: `/products/${updatedData.id}`,
+        url: `${PRODUCTS_URL_PREFIX}/${updatedData.id}`,
         method: HttpMethod.PATCH,
         body: updatedData,
       }),
-      invalidatesTags: (_, error) => (error ? [] : ['Products']),
+      invalidatesTags: (_, error) => (error ? [] : [PRODUCTS_CACHING_TAG]),
     }),
     deleteProduct: builder.mutation<void, string>({
       query: (productId) => ({
         url: `/products/${productId}`,
         method: HttpMethod.DELETE,
       }),
-      invalidatesTags: (_, error) => (error ? [] : ['Products']),
+      invalidatesTags: (_, error) => (error ? [] : [PRODUCTS_CACHING_TAG]),
     }),
   }),
 });

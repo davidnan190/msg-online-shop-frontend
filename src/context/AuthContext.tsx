@@ -31,8 +31,8 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   );
 
   const [loggedInUserId, setLoggedInId] = useState<string | null>(
-    localStorage.getItem(LocalStorageKey.LOGGED_IN_USER)
-      ? (localStorage.getItem(LocalStorageKey.LOGGED_IN_USER) as string)
+    localStorage.getItem(LocalStorageKey.LOGGED_IN_USER_ID)
+      ? (localStorage.getItem(LocalStorageKey.LOGGED_IN_USER_ID) as string)
       : null
   );
 
@@ -58,9 +58,9 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   useEffect(() => {
     if (loggedInUserId) {
-      localStorage.setItem(LocalStorageKey.LOGGED_IN_USER, loggedInUserId);
+      localStorage.setItem(LocalStorageKey.LOGGED_IN_USER_ID, loggedInUserId);
     } else {
-      localStorage.removeItem(LocalStorageKey.LOGGED_IN_USER);
+      localStorage.removeItem(LocalStorageKey.LOGGED_IN_USER_ID);
     }
   }, [loggedInUserId]);
 
@@ -88,7 +88,7 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     setAccessToken(newAccessToken);
     setRefreshToken(newRefreshToken);
     setLoggedInId(newLoggedInUser.id);
-    console.log('ID ' + newLoggedInUser.id)
+    console.log('ID ' + newLoggedInUser.id);
     setUserRole(newLoggedInUser.role);
 
     dispatch(
@@ -106,11 +106,6 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     setUserRole(null);
     dispatch(clearCredentials());
   }, [dispatch]);
-
-  const retrieveLoggedInUser = (): ICustomer | null => {
-    const user = localStorage.getItem(LocalStorageKey.LOGGED_IN_USER);
-    return user ? (JSON.parse(user) as ICustomer) : null;
-  };
 
   const value = {
     accessToken,

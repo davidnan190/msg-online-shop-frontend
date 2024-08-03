@@ -1,3 +1,8 @@
+import {
+  AUTHORIZATION_HEADER,
+  BEARER_TOKEN_PREFIX,
+} from '../constants/auth.constants';
+
 import { BACKEND_BASE_URL } from '../constants/api.constants';
 import { LocalStorageKey } from '../enums/local-storage-key.enum';
 import { RootState } from './store';
@@ -5,7 +10,6 @@ import { fetchBaseQuery } from '@reduxjs/toolkit/query';
 
 export const baseQueryWithAuth = fetchBaseQuery({
   baseUrl: BACKEND_BASE_URL,
-  // credentials: 'include',
   prepareHeaders: (headers, { getState }) => {
     const state = getState() as RootState;
     const accessToken =
@@ -14,7 +18,7 @@ export const baseQueryWithAuth = fetchBaseQuery({
     console.log(accessToken);
 
     if (accessToken) {
-      headers.set('Authorization', `Bearer ${accessToken}`);
+      headers.set(AUTHORIZATION_HEADER, `${BEARER_TOKEN_PREFIX}${accessToken}`);
     }
     return headers;
   },

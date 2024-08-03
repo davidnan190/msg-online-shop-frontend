@@ -1,6 +1,6 @@
+import { BACKEND_BASE_URL, LOGIN_URL_PREFIX, REGISTRATION_URL_PREFIX } from '../constants/api.constants';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import { BACKEND_BASE_URL } from '../constants/api.constants';
 import { HttpMethod } from '../enums/http-method.enum';
 import { LoginRequest } from '../types/auth/login-request.type';
 import { LoginResponse } from '../types/auth/login-response.type';
@@ -13,14 +13,14 @@ export const authAPI = createApi({
   endpoints: (builder) => ({
     register: builder.mutation<RegistrationResponse, RegistrationRequest>({
       query: (registrationPayload) => ({
-        url: '/register',
+        url: REGISTRATION_URL_PREFIX,
         method: HttpMethod.POST,
         body: registrationPayload,
       }),
     }),
     login: builder.mutation<LoginResponse, LoginRequest>({
       query: (loginPayload) => ({
-        url: '/login',
+        url: LOGIN_URL_PREFIX,
         method: HttpMethod.POST,
         body: loginPayload,
       }),

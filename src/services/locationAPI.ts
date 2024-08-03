@@ -1,3 +1,4 @@
+import { LOCATIONS_CACHING_TAG, LOCATIONS_URL_PREFIX } from '../constants/api.constants';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { ILocation } from '../types/locations/location.interface';
@@ -6,15 +7,15 @@ import { baseQueryWithAuth } from './baseQueryWithAuth';
 export const locationAPI = createApi({
   reducerPath: 'locationAPI',
   baseQuery: baseQueryWithAuth,
-  tagTypes: ['Locations'],
+  tagTypes: [LOCATIONS_CACHING_TAG],
   endpoints: (builder) => ({
     getAllLocations: builder.query<ILocation[], void>({
-      query: () => '/locations',
+      query: () => LOCATIONS_URL_PREFIX,
       keepUnusedDataFor: 360,
-      providesTags: () => ['Locations'],
+      providesTags: () => [LOCATIONS_CACHING_TAG],
     }),
     getLocationById: builder.query<ILocation[], string>({
-      query: (locationId) => `/locations/${locationId}`,
+      query: (locationId) => `${LOCATIONS_URL_PREFIX}/${locationId}`,
     }),
   }),
 });
