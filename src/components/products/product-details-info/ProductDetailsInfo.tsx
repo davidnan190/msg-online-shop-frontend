@@ -1,7 +1,14 @@
-import './ProductDetailsInfo.scss';
+import { Box, Chip, Typography } from '@mui/material';
 
 import { IProduct } from '../../../types/products/product.interface';
 import React from 'react';
+import { styled } from '@mui/material/styles';
+
+const StyledChip = styled(Chip)(({ theme }) => ({
+  backgroundColor: theme.palette.secondary.main,
+  color: theme.palette.secondary.contrastText,
+  marginBottom: theme.spacing(1),
+}));
 
 type ProductDetailsInfoProps = {
   product: IProduct;
@@ -9,13 +16,21 @@ type ProductDetailsInfoProps = {
 
 export const ProductDetailsInfo: React.FC<ProductDetailsInfoProps> = ({ product }) => {
   return (
-    <div className="product-info">
-      <h1 className="product-name">{product.name}</h1>
-      <span className="product-category">{product.category.name}</span>
-      <p className="product-price">{product.price} RON</p>
-      <p className="product-weight">Weight: {product.weight} kg</p>
-      <p className="product-supplier">Supplier: {product.supplier}</p>
-      <p className="product-description">{product.description}</p>
-    </div>
+    <Box>
+      <Typography variant="h5" component="h2" gutterBottom>
+        {product.name}
+      </Typography>
+      <StyledChip label={product.category.name} />
+      <Typography variant="h6" color="primary" gutterBottom>
+        {product.price} RON
+      </Typography>
+      <Typography variant="body1" gutterBottom>
+        Weight: {product.weight} kg
+      </Typography>
+      <Typography variant="body1" gutterBottom>
+        Supplier: {product.supplier}
+      </Typography>
+      <Typography variant="body2">{product.description}</Typography>
+    </Box>
   );
 };
