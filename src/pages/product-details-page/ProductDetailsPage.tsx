@@ -1,9 +1,20 @@
-import './ProductDetailsPage.scss';
-
+import {
+  Box,
+  CircularProgress,
+  Container,
+  Grid,
+  Paper,
+  Typography,
+} from '@mui/material';
 import {
   CART_URL_PREFIX,
   PRODUCTS_URL_PREFIX,
 } from '../../constants/api.constants';
+import React, { useState } from 'react';
+import {
+  useDeleteProductMutation,
+  useGetProductByIdQuery,
+} from '../../services/productAPI';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import EditProductForm from '../../components/products/edit-product-details/EditProductDetailsForm';
@@ -11,12 +22,17 @@ import { ILocation } from '../../types/locations/location.interface';
 import { ProductDetailsActions } from '../../components/products/product-details-actions/ProductDetailsActions';
 import { ProductDetailsImage } from '../../components/products/product-details-image/ProductDetailsImage';
 import { ProductDetailsInfo } from '../../components/products/product-details-info/ProductDetailsInfo';
+import { styled } from '@mui/material/styles';
 import { useCart } from '../../context/CartContext';
-import { useDeleteProduct } from '../../hooks/products/useDeleteProduct';
-import { useFetchLocations } from '../../hooks/locations/useFetchLocations';
-import { useFetchProduct } from '../../hooks/products/useFetchProduct';
-import { useFetchProductCategories } from '../../hooks/categories/useFetchProductCategories';
-import { useState } from 'react';
+import { useGetAllCategoriesQuery } from '../../services/categoryAPI';
+import { useGetAllLocationsQuery } from '../../services/locationAPI';
+
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(3),
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+}));
 
 export const ProductDetailsPage: React.FC = () => {
   const { productId } = useParams<{ productId: string }>();
@@ -24,37 +40,43 @@ export const ProductDetailsPage: React.FC = () => {
   const { addToCart } = useCart();
 
   const {
-    product,
+    data: product,
     isLoading: isFetchLoading,
     error: fetchError,
-  } = useFetchProduct(productId || '');
+  } = useGetProductByIdQuery(productId || '');
 
-  const { locations, error: locationsError } = useFetchLocations();
+  const { data: locations, error: locationsError } = useGetAllLocationsQuery();
 
-  const { categories, error: categoriesError } = useFetchProductCategories();
+  const { data: categories, error: categoriesError } =
+    useGetAllCategoriesQuery();
 
-  const {
-    deleteProduct,
-    isLoading: isDeleteLoading,
-    error: deleteError,
-  } = useDeleteProduct();
+  const [deleteProduct] = useDeleteProductMutation();
+
+  const [isEditing, setIsEditing] = useState(false);
 
   const toggleIsEditing = () => {
     setIsEditing((prevValue) => !prevValue);
   };
 
-  const [isEditing, setIsEditing] = useState(false);
-
   if (isFetchLoading) {
-    return <div>Loading...</div>;
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
   }
 
   if (fetchError) {
-    return <div>{fetchError}</div>;
+    return <Typography color="error">Unable to load product</Typography>;
   }
 
   if (!product) {
-    return <div>Product not found</div>;
+    return <Typography color="error">Product not found</Typography>;
   }
 
   const handleDeleteProduct = async () => {
@@ -70,33 +92,40 @@ export const ProductDetailsPage: React.FC = () => {
   };
 
   return (
-    <div className="product-details-page">
-      <h1 className="page-headline">Product Details</h1>
-      <div className="product-details-card">
-        {!isEditing && <ProductDetailsImage imageUrl={product.imageUrl} />}
-        <div className="product-info">
-          {isEditing ? (
-            <EditProductForm
-              product={product}
-              toggleIsEditing={toggleIsEditing}
-              availableCategories={categories}
-            />
-          ) : (
-            <ProductDetailsInfo product={product} />
-          )}
-          {!isEditing && (
-            <>
-              <ProductDetailsActions
-                onAddToCart={handleAddToCart}
-                availableLocations={locations}
-                onDeleteProduct={handleDeleteProduct}
-                onEditProduct={() => setIsEditing(true)}
-              />
-            </>
-          )}
-          {deleteError && <div className="error-message">{deleteError}</div>}
-        </div>
-      </div>
-    </div>
+    <Container maxWidth="lg">
+      <Box my={4}>
+        <Typography color="#a01441" variant="h4" component="h1" gutterBottom>
+          Product Details
+        </Typography>
+        <StyledPaper elevation={3}>
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={6}>
+              {!isEditing && (
+                <ProductDetailsImage imageUrl={product.imageUrl} />
+              )}
+            </Grid>
+            <Grid item xs={12} md={6}>
+              {isEditing ? (
+                <EditProductForm
+                  product={product}
+                  toggleIsEditing={toggleIsEditing}
+                  availableCategories={categories}
+                />
+              ) : (
+                <>
+                  <ProductDetailsInfo product={product} />
+                  <ProductDetailsActions
+                    onAddToCart={handleAddToCart}
+                    availableLocations={locations}
+                    onDeleteProduct={handleDeleteProduct}
+                    onEditProduct={() => setIsEditing(true)}
+                  />
+                </>
+              )}
+            </Grid>
+          </Grid>
+        </StyledPaper>
+      </Box>
+    </Container>
   );
 };

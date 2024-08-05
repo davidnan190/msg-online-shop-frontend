@@ -14,7 +14,7 @@ export const LoggerProvider: React.FC<LoggerProviderProps> = ({ children }) => {
       console.info(`[INFO]: ${message}`, context);
     },
     debug: (message, context) => {
-      console.error(`[ERROR] : ${message}`, context);
+      console.debug(`[DEBUG] : ${message}`, context);
     },
     warn: (message, context) => {
       console.warn(`[WARN] : ${message}`, context);

@@ -3,38 +3,26 @@ import './LoginForm.scss';
 import { LoginSchema, loginSchema } from '../../../types/schemas/login-schema';
 
 import { LoginRequest } from '../../../types/auth/login-request.type';
-import { PRODUCTS_URL_PREFIX } from '../../../constants/api.constants';
 import React from 'react';
-import { setAxiosAccessToken } from '../../../utils/request.utils';
-import { useAuthContext } from '../../../context/AuthContext';
 import { useForm } from 'react-hook-form';
-import { useLogin } from '../../../hooks/auth/useLogin';
-import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-const LoginForm: React.FC = () => {
-  const navigate = useNavigate();
+type Props = {
+  onLogin: (credentials: LoginRequest) => Promise<void>;
+  isLoading: boolean;
+};
+
+const LoginForm: React.FC<Props> = ({ onLogin, isLoading }) => {
   const { register, handleSubmit, formState } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     mode: 'onTouched',
   });
 
-  const { login: authLogin, accessToken } = useAuthContext();
-  const { login, isLoading } = useLogin();
-
-  const handleLogin = async (credentials: LoginRequest) => {
-    const response = await login(credentials);
-    if (response) {
-      authLogin(
-        response.tokens.accessToken,
-        response.tokens.refreshToken,
-        response.customer
-      );
-
-      if (response.tokens.accessToken) {
-        setAxiosAccessToken(response.tokens.accessToken);
-        navigate(PRODUCTS_URL_PREFIX);
-      }
+  const handleLogin = async (credentials: LoginSchema) => {
+    try {
+      await onLogin(credentials);
+    } catch (error) {
+      console.error('Login failed:', error);
     }
   };
 
@@ -58,6 +46,7 @@ const LoginForm: React.FC = () => {
             id="emailAddress"
             placeholder="Email Address"
             required
+            disabled={isLoading}
           />
           {formState.errors.emailAddress && (
             <div className="invalid-feedback">
@@ -80,6 +69,7 @@ const LoginForm: React.FC = () => {
             id="password"
             placeholder="Password"
             required
+            disabled={isLoading}
           />
           {formState.errors.password && (
             <div className="invalid-feedback">

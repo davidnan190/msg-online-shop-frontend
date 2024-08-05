@@ -8,7 +8,6 @@ import {
 } from '../constants/auth.constants';
 
 import { IFetchOptions } from '../types/requests/fetch-options.interface';
-import axiosInstance from '../api/axios-instance';
 
 export const handleApiError = (error: any): void => {
   console.error('API call failed:', error);
@@ -41,14 +40,4 @@ export const createHeaders = (accessToken?: string): Record<string, string> => {
     headers[AUTHORIZATION_HEADER] = `${BEARER_TOKEN_PREFIX}${accessToken}`;
   }
   return headers;
-};
-
-export const setAxiosAccessToken = (accessToken: string) => {
-  axiosInstance.defaults.headers.common[
-    AUTHORIZATION_HEADER
-  ] = `${BEARER_TOKEN_PREFIX}${accessToken}`;
-};
-
-export const clearAxiosAccessToken = () => {
-  axiosInstance.defaults.headers.common[AUTHORIZATION_HEADER] = null;
 };

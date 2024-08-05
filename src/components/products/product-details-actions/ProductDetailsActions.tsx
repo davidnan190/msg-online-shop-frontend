@@ -1,8 +1,22 @@
-import './ProductDetailsActions.scss';
-
+import {
+  Box,
+  Button,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField
+} from '@mui/material';
 import React, { useState } from 'react';
 
 import { ILocation } from '../../../types/locations/location.interface';
+import { styled } from '@mui/material/styles';
+
+const StyledFormControl = styled(FormControl)(({ theme }) => ({
+  minWidth: 120,
+  marginBottom: theme.spacing(2),
+}));
 
 type ProductDetailsActionsProps = {
   onAddToCart: (quantity: number, location: ILocation) => void;
@@ -18,66 +32,67 @@ export const ProductDetailsActions: React.FC<ProductDetailsActionsProps> = ({
   onEditProduct,
 }) => {
   const [quantity, setQuantity] = useState<number>(1);
-  const [selectedLocation, setSelectedLocation] = useState<
-    ILocation | undefined
-  >(availableLocations ? availableLocations[0] : undefined);
+  const [selectedLocation, setSelectedLocation] = useState<ILocation | undefined>(
+    availableLocations ? availableLocations[0] : undefined
+  );
 
   return (
-    <div className="product-details-actions">
-      <div className="input-group">
-        <div className="action-group">
-          <label htmlFor="quantity" className="quantity-label">
-            Quantity:
-          </label>
-          <input
-            type="number"
-            id="quantity"
-            className="quantity-input"
-            value={quantity}
-            onChange={(e) => setQuantity(parseInt(e.target.value, 10))}
-            min="1"
-          />
-        </div>
-        <div className="action-group">
-          <label htmlFor="location" className="location-label">
-            Location:
-          </label>
-          <select
-            id="location"
-            className="location-input"
-            value={selectedLocation?.id}
-            onChange={(e) => {
-              const location = availableLocations?.find(
-                (location) => location.id === e.target.value
-              );
-              setSelectedLocation(location);
-            }}
-          >
-            {availableLocations?.map((location) => (
-              <option key={location.id} value={location.id}>
-                {location.city}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-
-      <button
-        className="btn btn-cart"
-        onClick={() => {
-          if (selectedLocation) onAddToCart(quantity, selectedLocation);
-        }}
-      >
-        Add to Cart
-      </button>
-      <div className="btn-group">
-        <button className="btn btn-delete" onClick={onDeleteProduct}>
+    <Box mt={2}>
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm={6}>
+          <StyledFormControl fullWidth>
+            <TextField
+              type="number"
+              label="Quantity"
+              value={quantity}
+              onChange={(e) => setQuantity(parseInt(e.target.value, 10))}
+              inputProps={{ min: "1" }}
+            />
+          </StyledFormControl>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <StyledFormControl fullWidth>
+            <InputLabel id="location-select-label">Location</InputLabel>
+            <Select
+              labelId="location-select-label"
+              value={selectedLocation?.id || ''}
+              onChange={(e) => {
+                const location = availableLocations?.find(
+                  (loc) => loc.id === e.target.value
+                );
+                setSelectedLocation(location);
+              }}
+              label="Location"
+            >
+              {availableLocations?.map((location) => (
+                <MenuItem key={location.id} value={location.id}>
+                  {location.city}
+                </MenuItem>
+              ))}
+            </Select>
+          </StyledFormControl>
+        </Grid>
+      </Grid>
+      <Box mt={2}>
+        <Button
+          variant="contained"
+          color="primary"
+          fullWidth
+          onClick={() => {
+            if (selectedLocation) onAddToCart(quantity, selectedLocation);
+          }}
+        >
+          Add to Cart
+        </Button>
+      </Box>
+      <Box mt={2} display="flex" justifyContent="space-between">
+        <Button variant="outlined" color="secondary" onClick={onDeleteProduct}>
           Delete Product
-        </button>
-        <button className="btn btn-edit" onClick={onEditProduct}>
+        </Button>
+        <Button variant="outlined" color="primary" onClick={onEditProduct}>
           Edit
-        </button>
-      </div>
-    </div>
+        </Button>
+      </Box>
+    </Box>
   );
 };

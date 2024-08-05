@@ -9,26 +9,27 @@ import { PlaceOrderSchema } from '../../types/schemas/place-order-schema';
 import React from 'react';
 import { useAuthContext } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
+import { useGetCustomerByIdQuery } from '../../services/customerAPI';
 import { useLogger } from '../../context/LoggerContext';
 import { useNavigate } from 'react-router-dom';
-import { usePlaceOrder } from '../../hooks/orders/usePlaceOrder';
+import { usePlaceOrderMutation } from '../../services/orderAPI';
 
 export const PlaceOrderPage: React.FC = () => {
   const { cart, clearCart } = useCart();
-  const { retrieveLoggedInUser } = useAuthContext();
-  const loggedInUser = retrieveLoggedInUser();
+  const { loggedInUserId } = useAuthContext();
   const navigate = useNavigate();
 
-  if (!loggedInUser) {
+  if (!loggedInUserId) {
     navigate(LOGIN_URL_PREFIX);
     return null;
   }
 
-  const {
-    isLoading: isPlaceOrderLoading,
-    error: placeOrderError,
+  const { data: loggedInUser } = useGetCustomerByIdQuery(loggedInUserId);
+
+  const [
     placeOrder,
-  } = usePlaceOrder();
+    { isLoading: isPlaceOrderLoading, error: placeOrderError },
+  ] = usePlaceOrderMutation();
 
   const logger = useLogger();
 
@@ -75,7 +76,11 @@ export const PlaceOrderPage: React.FC = () => {
           <CartItem key={index} item={item} />
         ))}
         <CartTotal cart={cart} />
-        <OrderForm onSubmit={handlePlaceOrder} isLoading={isPlaceOrderLoading} errors={placeOrderError} />
+        <OrderForm
+          onSubmit={handlePlaceOrder}
+          isLoading={isPlaceOrderLoading}
+          errors={placeOrderError}
+        />
       </div>
     </>
   );

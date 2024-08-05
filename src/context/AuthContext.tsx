@@ -6,15 +6,22 @@ import React, {
   useEffect,
   useState,
 } from 'react';
+import {
+  clearCredentials,
+  setCredentials,
+} from '../store/authCredentialsSlice';
 
 import { IAuthContextType } from '../types/contexts/auth-context-type.interface';
 import { ICustomer } from '../types/customers/customer.interface';
 import { LocalStorageKey } from '../enums/local-storage-key.enum';
 import { Role } from '../enums/role.enum';
+import { useDispatch } from 'react-redux';
 
 const AuthContext = createContext<IAuthContextType | undefined>(undefined);
 
 const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const dispatch = useDispatch();
+
   const [accessToken, setAccessToken] = useState<string | null>(
     localStorage.getItem(LocalStorageKey.ACCESS_TOKEN)
   );
@@ -23,12 +30,14 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     localStorage.getItem(LocalStorageKey.REFRESH_TOKEN)
   );
 
-  const [loggedInUser, setLoggedInUser] = useState<ICustomer | null>(
-    localStorage.getItem(LocalStorageKey.LOGGED_IN_USER)
-      ? JSON.parse(
-          localStorage.getItem(LocalStorageKey.LOGGED_IN_USER) as string
-        )
+  const [loggedInUserId, setLoggedInId] = useState<string | null>(
+    localStorage.getItem(LocalStorageKey.LOGGED_IN_USER_ID)
+      ? (localStorage.getItem(LocalStorageKey.LOGGED_IN_USER_ID) as string)
       : null
+  );
+
+  const [userRole, setUserRole] = useState<string | null>(
+    localStorage.getItem(LocalStorageKey.LOGGED_IN_USER_ROLE) as string
   );
 
   useEffect(() => {
@@ -48,22 +57,27 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   }, [refreshToken]);
 
   useEffect(() => {
-    if (loggedInUser) {
-      localStorage.setItem(
-        LocalStorageKey.LOGGED_IN_USER,
-        JSON.stringify(loggedInUser)
-      );
+    if (loggedInUserId) {
+      localStorage.setItem(LocalStorageKey.LOGGED_IN_USER_ID, loggedInUserId);
     } else {
-      localStorage.removeItem(LocalStorageKey.LOGGED_IN_USER);
+      localStorage.removeItem(LocalStorageKey.LOGGED_IN_USER_ID);
     }
-  }, [loggedInUser]);
+  }, [loggedInUserId]);
+
+  useEffect(() => {
+    if (userRole) {
+      localStorage.setItem(LocalStorageKey.LOGGED_IN_USER_ROLE, userRole);
+    } else {
+      localStorage.removeItem(LocalStorageKey.LOGGED_IN_USER_ROLE);
+    }
+  }, [loggedInUserId]);
 
   const isCustomer = () => {
-    return loggedInUser?.role === Role.CUSTOMER;
+    return userRole === Role.CUSTOMER;
   };
 
   const isAdmin = () => {
-    return loggedInUser?.role === Role.ADMIN;
+    return userRole === Role.ADMIN;
   };
 
   const login = (
@@ -73,25 +87,30 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   ) => {
     setAccessToken(newAccessToken);
     setRefreshToken(newRefreshToken);
-    setLoggedInUser(newLoggedInUser);
+    setLoggedInId(newLoggedInUser.id);
+    setUserRole(newLoggedInUser.role);
+
+    dispatch(
+      setCredentials({
+        accessToken: newAccessToken,
+        refreshToken: newRefreshToken,
+      })
+    );
   };
 
   const logout = useCallback(() => {
     setAccessToken(null);
     setRefreshToken(null);
-    setLoggedInUser(null);
-  }, []);
-
-  const retrieveLoggedInUser = (): ICustomer | null => {
-    const user = localStorage.getItem(LocalStorageKey.LOGGED_IN_USER);
-    return user ? (JSON.parse(user) as ICustomer) : null;
-  };
+    setLoggedInId(null);
+    setUserRole(null);
+    dispatch(clearCredentials());
+  }, [dispatch]);
 
   const value = {
     accessToken,
     refreshToken,
-    retrieveLoggedInUser,
-    userRole: loggedInUser ? loggedInUser.role : null,
+    loggedInUserId,
+    userRole,
     isCustomer,
     isAdmin,
     login,

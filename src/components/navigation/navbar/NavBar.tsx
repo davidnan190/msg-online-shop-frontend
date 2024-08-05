@@ -3,23 +3,27 @@ import './NavBar.scss';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 
 import CustomerProfileDropdown from '../dropdown/CustomerProfileDropdown';
-import { ICustomer } from '../../../types/customers/customer.interface';
 import { LOGIN_URL_PREFIX } from '../../../constants/api.constants';
 import { NavBarLinks } from '../navbar-links/NavBarLinks';
 import appLogo from '../../../assets/msg-logo.png';
-import { clearAxiosAccessToken } from '../../../utils/request.utils';
 import { useAuthContext } from '../../../context/AuthContext';
+import { useCart } from '../../../context/CartContext';
+import { useGetCustomerByIdQuery } from '../../../services/customerAPI';
 
 export const NavBar: React.FC = () => {
-  const { retrieveLoggedInUser, logout, accessToken } = useAuthContext();
-  const loggedInUser = retrieveLoggedInUser() as ICustomer;
+  const { loggedInUserId, logout, accessToken } = useAuthContext();
   const navigate = useNavigate();
+  const { clearCart } = useCart();
 
-  console.log(accessToken)
+  if (!loggedInUserId) {
+    return;
+  }
+
+  const { data: loggedInUser } = useGetCustomerByIdQuery(loggedInUserId);
 
   const handleLogout = () => {
     logout();
-    clearAxiosAccessToken();
+    clearCart();
     navigate(LOGIN_URL_PREFIX);
   };
 
