@@ -1,18 +1,17 @@
-import { CATEGORIES_CACHING_TAG, CATEGORIES_URL_PREFIX } from '../constants/api.constants';
+import {
+  CATEGORIES_CACHE_TAG,
+  CATEGORIES_URL_PREFIX,
+} from '../constants/api.constants';
 
 import { IProductCategory } from '../types/products/product-category.interface';
-import { baseQueryWithAuth } from './baseQueryWithAuth';
-import { createApi } from '@reduxjs/toolkit/query/react';
+import { baseApi } from './baseApi';
 
-export const categoryAPI = createApi({
-  reducerPath: 'categoryAPI',
-  baseQuery: baseQueryWithAuth,
-  tagTypes: [CATEGORIES_CACHING_TAG],
+export const categoryApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllCategories: builder.query<IProductCategory[], void>({
       query: () => CATEGORIES_URL_PREFIX,
       keepUnusedDataFor: 120,
-      providesTags: () => [CATEGORIES_CACHING_TAG],
+      providesTags: [CATEGORIES_CACHE_TAG],
     }),
     getCategoryById: builder.query<IProductCategory, string>({
       query: (categoryId) => `${CATEGORIES_URL_PREFIX}/${categoryId}`,
@@ -21,4 +20,4 @@ export const categoryAPI = createApi({
 });
 
 export const { useGetAllCategoriesQuery, useGetCategoryByIdQuery } =
-  categoryAPI;
+  categoryApi;

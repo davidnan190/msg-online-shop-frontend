@@ -12,11 +12,12 @@ export const LOCATIONS_URL_PREFIX = '/locations';
 export const PLACE_ORDER_URL_PREFIX = '/place-order';
 export const CREATE_PRODUCT_URL_PREFIX = '/create';
 
-export const PRODUCTS_CACHING_TAG = 'Products';
-export const CATEGORIES_CACHING_TAG = 'ProductCategories';
-export const LOCATIONS_CACHING_TAG = 'Locations';
-export const CUSTOMERS_CACHING_TAG = 'Customers';
-export const ORDERS_CACHING_TAG = 'Orders';
+export const AUTH_CACHE_TAG = 'AUTH';
+export const PRODUCTS_CACHE_TAG = 'PRODUCTS';
+export const CATEGORIES_CACHE_TAG = 'PRODUCT_CATEGORIES';
+export const LOCATIONS_CACHE_TAG = 'LOCATIONS';
+export const CUSTOMERS_CACHE_TAG = 'CUSTOMERS';
+export const ORDERS_CACHE_TAG = 'ORDERS';
 
 export const ABORT_ERROR = 'AbortError';
 export const ERROR_REQUEST_CANCELLED_BY_CLIENT = 'Request canceled by client.';

@@ -88,7 +88,6 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     setAccessToken(newAccessToken);
     setRefreshToken(newRefreshToken);
     setLoggedInId(newLoggedInUser.id);
-    console.log('ID ' + newLoggedInUser.id);
     setUserRole(newLoggedInUser.role);
 
     dispatch(
